@@ -126,20 +126,34 @@ class App  extends React.Component{
 
     handleClick(i, j){
         let clicked_piece = this.state.board[i][j]; //an object with info about the box we just clicked
-        if(this.state.selected_piece.value == "" || clicked_piece.value != ""){
+        // info about the previously clicked element that was clicked prior to this current click
+        let previous_value = this.state.selected_piece.value;
+        let previous_i = this.state.selected_piece.i;
+        let previous_j = this.state.selected_piece.j;
+        
+        if(previous_value  == "" || clicked_piece.value != ""){ 
+            // if we clicked a non-empty empty square, or if the previous square we clicked was empty
+            // We update the previous selected element to be the current one we clicked. This will be used for comparison with the next click
+
             this.setState({
                 selected_piece: { i : i, j : j, value : clicked_piece.value }
             });
-        } else if(clicked_piece.value == "" && this.state.selected_piece.value != "") {
+        
+        } else if(clicked_piece.value == "" && previous_value != "") {
+            //if we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
             console.log("moved!");
+            //making a copy of the board to be updated
             let board_copy = [...this.state.board];
+            // swapping the elements in the board (the current one we clicked with the previous one we clicked)
             let temp = board_copy[i][j];
-            board_copy[i][j] = board_copy[this.state.selected_piece.i][this.state.selected_piece.j];    
-            board_copy[this.state.selected_piece.i][this.state.selected_piece.j] = temp;
+            board_copy[i][j] = board_copy[previous_i][previous_j];    
+            board_copy[previous_i][previous_j] = temp;
+            // update the board and reset the previous selection to be nothing
             this.setState({
                 board: [...board_copy],
                 selected_piece: { i : "", j : "", value : "" }
             });
+        
         }
     }
 
