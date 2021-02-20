@@ -12,9 +12,10 @@ import darkRook from '../src/full rez pics/darkRook.png';
 import lightRook from '../src/full rez pics/lightRook.png';
 
 interface Piece {
-    image: string,
-    piece: string,
-    color: string
+    image: string;
+    piece: string;
+    color?: string; // optional because blank squares won't have a piece color element
+    moved_before?: boolean; // only applies to pawns because their moving options change as the game progressess
 }
 
 let dark_Rook:Piece = {
@@ -23,75 +24,75 @@ let dark_Rook:Piece = {
     color: "dark"
 };
 
-let dark_Knight = {
+let dark_Knight:Piece = {
     image: darkKnight,
     piece: "Knight",
     color: "dark"
 };
 
-let dark_Bishop = {
+let dark_Bishop:Piece = {
     image: darkBishop,
     piece: "Bishop",
     color: "dark"
 };
 
-let dark_Queen = {
+let dark_Queen:Piece = {
     image: darkQueen,
     piece: "Queen",
     color: "dark"
 };
 
-let dark_King = {
+let dark_King:Piece = {
     image: darkKing,
     piece: "King",
     color: "dark"
 };
 
-let dark_Pawn = {
+let dark_Pawn:Piece = {
     image: darkPawn,
     piece: "Pawn",
     color: "dark",
     moved_before: false
 };
 
-let light_Rook = {
+let light_Rook:Piece = {
     image: lightRook,
     piece: "Rook",
     color: "light",
 };
 
-let light_Knight = {
+let light_Knight:Piece = {
     image: lightKnight,
     piece: "Knight",
     color: "light"
 };
 
-let light_Bishop = {
+let light_Bishop:Piece = {
     image: lightBishop,
     piece: "Bishop",
     color: "light"
 };
 
-let light_Queen = {
+let light_Queen:Piece = {
     image: lightQueen,
     piece: "Queen",
     color: "light"
 };
 
-let light_King = {
+let light_King:Piece = {
     image: lightKing,
     piece: "King",
     color: "light"
 };
 
-let light_Pawn = {
+let light_Pawn:Piece = {
     image: lightPawn,
     piece: "Pawn",
     color: "light",
     moved_before: false
 };
 
-let blank = {
+let blank:Piece = {
     image: "",
     piece: ""
 }
@@ -106,14 +107,3 @@ export let pieces = [
     new Array(8).fill(light_Pawn),
     [light_Rook, light_Knight, light_Bishop, light_Queen, light_King, light_Bishop, light_Knight, light_Rook],
 ]
-
-// pieces: [
-//     [darkRook, darkKnight, darkBishop, darkQueen, darkKing, darkBishop, darkKnight, darkRook],
-//     new Array(8).fill(darkPawn),
-//     new Array(8).fill(""),
-//     new Array(8).fill(""),
-//     new Array(8).fill(""),
-//     new Array(8).fill(""),
-//     new Array(8).fill(lightPawn),
-//     [lightRook, lightKnight, lightBishop, lightQueen, lightKing, lightBishop, lightKnight, lightRook],
-// ]

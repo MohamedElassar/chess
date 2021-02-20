@@ -1,5 +1,4 @@
-
-export function getColor(i, j){
+export function getColor(i : number, j : number) : string  {
     if(i%2 === 0){
         if(j%2 === 0){
             return "rgb(243, 218, 176)"

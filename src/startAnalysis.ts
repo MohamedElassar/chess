@@ -1,4 +1,24 @@
-export function startAnalysis(instance, i, j, clicked_piece, state, default_squareColor){
+interface Piece {
+    image: string;
+    piece: string;
+    color?: string; // optional because blank squares won't have a piece color element
+    moved_before?: boolean; // only applies to pawns because their moving options change as the game progressess
+}
+
+interface SelectedPiece {
+    i: number | string;
+    j: number | string;
+    value: number | string;
+}
+
+interface State {
+    board: Array<Array<Piece>>;
+    selected_piece: SelectedPiece;
+    squareColor: Array<Array<string>>;
+    instance: this;
+}
+
+export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Piece, state:State, default_squareColor:Array<Array<string>>){
 
     let previous_value = state.selected_piece.value;
     let previous_i = state.selected_piece.i;
@@ -9,7 +29,7 @@ export function startAnalysis(instance, i, j, clicked_piece, state, default_squa
         case true:
             switch (clicked_piece.piece == "") {
                 case true:
-                    instance.setState( (prevState) => ({
+                    instance.setState( (prevState:State) => ({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece },
                         squareColor: default_squareColor
                         }));
@@ -35,10 +55,10 @@ export function startAnalysis(instance, i, j, clicked_piece, state, default_squa
                     let board_copy = [...state.board];
                     // swapping the elements in the board (the current one we clicked with the previous one we clicked)
                     let temp = board_copy[i][j];
-                    board_copy[i][j] = board_copy[previous_i][previous_j];    
-                    board_copy[previous_i][previous_j] = temp;
+                    board_copy[i][j] = board_copy[previous_i as number][previous_j as number];    
+                    board_copy[previous_i as number][previous_j as number] = temp;
                     // update the board and reset the previous selection to be nothing
-                    instance.setState( (prevState) => ({
+                    instance.setState( (prevState:State) => ({
                         board: [...board_copy],
                         selected_piece: { i : "", j : "", value : "" },
                         squareColor: default_squareColor.map((value) => value.slice())
