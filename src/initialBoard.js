@@ -13,69 +13,81 @@ import lightRook from '../src/full rez pics/lightRook.png';
 
 let dark_Rook = {
     image: darkRook,
-    value: "darkRook"
+    piece: "Rook",
+    color: "dark"
 };
 
 let dark_Knight = {
     image: darkKnight,
-    value: "darkKnight"
+    piece: "Knight",
+    color: "dark"
 };
 
 let dark_Bishop = {
     image: darkBishop,
-    value: "darkBishop"
+    piece: "Bishop",
+    color: "dark"
 };
 
 let dark_Queen = {
     image: darkQueen,
-    value: "darkQueen"
+    piece: "Queen",
+    color: "dark"
 };
 
 let dark_King = {
     image: darkKing,
-    value: "darkKing"
+    piece: "King",
+    color: "dark"
 };
 
 let dark_Pawn = {
     image: darkPawn,
-    value: "darkPawn",
+    piece: "Pawn",
+    color: "dark",
     moved_before: false
 };
 
 let light_Rook = {
     image: lightRook,
-    value: "lightRook"
+    piece: "Rook",
+    color: "light",
 };
 
 let light_Knight = {
     image: lightKnight,
-    value: "lightKnight"
+    piece: "Knight",
+    color: "light"
 };
 
 let light_Bishop = {
     image: lightBishop,
-    value: "lightBishop"
+    piece: "Bishop",
+    color: "light"
 };
 
 let light_Queen = {
     image: lightQueen,
-    value: "lightQueen"
+    piece: "Queen",
+    color: "light"
 };
 
 let light_King = {
     image: lightKing,
-    value: "lightKing"
+    piece: "King",
+    color: "light"
 };
 
 let light_Pawn = {
     image: lightPawn,
-    value: "lightPawn",
+    piece: "Pawn",
+    color: "light",
     moved_before: false
 };
 
 let blank = {
     image: "",
-    value: ""
+    piece: ""
 }
 
 export let pieces = [

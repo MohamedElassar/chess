@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import {getColor} from './utils';
 import {pieces} from './initialBoard';
+import { startAnalysis } from './startAnalysis';
+
+// just storing a copy of the default chess color puzzle. This is so that we can reset to this set of colors when needed
+let default_squareColor = new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  )
 
 const Square = (props) => {
     return(
@@ -23,7 +27,7 @@ class ChessBoard extends React.Component {
         return <Square 
                     image={this.props.pieces[i][j].image}  
                     onClick={() => this.props.handleClick(i, j)} 
-                    color={color}>
+                    color={this.props.squareColor[i][j]}>
                 </Square>
     }
 
@@ -119,48 +123,32 @@ class App  extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            board: pieces, //board is an array of objects. Object.image and Object.value are the attributes we're storing
+            board: pieces, //board is an array of objects. Object.image, Object.color, and Object.piece are the attributes we're storing
             selected_piece: { i : "", j : "", value : "" },
+            // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
+            squareColor: new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  ),
         }
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(i, j){
-        let clicked_piece = this.state.board[i][j]; //an object with info about the box we just clicked
-        // info about the previously clicked element that was clicked prior to this current click
-        let previous_value = this.state.selected_piece.value;
-        let previous_i = this.state.selected_piece.i;
-        let previous_j = this.state.selected_piece.j;
         
-        if(previous_value  == "" || clicked_piece.value != ""){ 
-            // if we clicked a non-empty empty square, or if the previous square we clicked was empty
-            // We update the previous selected element to be the current one we clicked. This will be used for comparison with the next click
+        //an object with info about the box we just clicked info about the previously clicked element that was clicked prior to this current click
+        let clicked_piece = this.state.board[i][j]; 
 
-            this.setState({
-                selected_piece: { i : i, j : j, value : clicked_piece.value }
-            });
+        if(clicked_piece.color !== "dark"){
+            startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
         
-        } else if(clicked_piece.value == "" && previous_value != "") {
-            //if we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
-            console.log("moved!");
-            //making a copy of the board to be updated
-            let board_copy = [...this.state.board];
-            // swapping the elements in the board (the current one we clicked with the previous one we clicked)
-            let temp = board_copy[i][j];
-            board_copy[i][j] = board_copy[previous_i][previous_j];    
-            board_copy[previous_i][previous_j] = temp;
-            // update the board and reset the previous selection to be nothing
-            this.setState({
-                board: [...board_copy],
-                selected_piece: { i : "", j : "", value : "" }
-            });
-        
+        } else {
+            // do nothing; we clicked a dark piece which we shouldn't be able to    
         }
+
     }
 
     render(){
         return(
             <div id="board-wrapper">
-                <ChessBoard pieces={this.state.board} handleClick={(i, j) => this.handleClick(i, j)} />
+                <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
             </div>
         );
     }   
