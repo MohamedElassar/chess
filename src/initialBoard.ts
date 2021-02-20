@@ -21,9 +21,10 @@ export interface Piece {
     piece: string;
     color?: string; // optional because blank squares won't have a piece color element
     moved_before?: boolean; // only applies to pawns because their moving options change as the game progressess
-    move?: Move[]; // an array of the type "Move", where each Move is an object with the x and y that define each chess piece's moves
-                    // cool thing is that the property "move" can be of variable length due to this definition "Move[]"
-                    // this is important because some chess pieces have way more possible moves than others  
+    move?: Move[]; 
+    // an array of the type "Move", where each Move is an object with the x and y that define each chess piece's moves
+    // cool thing is that the property "move" can be of variable length due to this definition "Move[]"
+    // this is important because some chess pieces have way more possible moves than others  
 }
 
 let dark_Rook:Piece = {
