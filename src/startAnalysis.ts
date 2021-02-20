@@ -1,9 +1,5 @@
-interface Piece {
-    image: string;
-    piece: string;
-    color?: string; // optional because blank squares won't have a piece color element
-    moved_before?: boolean; // only applies to pawns because their moving options change as the game progressess
-}
+import {Piece, Move} from './initialBoard'; // importing the interfaces from the initalBoard file which defines each piece object
+import {findTheHighlightedSquares} from './utils'; // function to color the right squares when we select a chess piece
 
 interface SelectedPiece {
     i: number | string;
@@ -18,7 +14,7 @@ interface State {
     instance: this;
 }
 
-export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Piece, state:State, default_squareColor:Array<Array<string>>){
+export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Piece, state:State, default_squareColor:Array<Array<string>>) {
 
     let previous_value = state.selected_piece.value;
     let previous_i = state.selected_piece.i;
@@ -26,18 +22,20 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
 
     switch (previous_value == "") {
 
-        case true:
+        case true: // if the previously selected piece was just an empty square:
             switch (clicked_piece.piece == "") {
-                case true:
+                case true: // previous was blank + current selection is blank
                     instance.setState( (prevState:State) => ({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece },
                         squareColor: default_squareColor
                         }));
                 break;
-                case false:
+                case false: // previous was blank + current selection is a chess piece
                     let temp_squareColor = default_squareColor.map((value) => value.slice());
-                    temp_squareColor[i-1][j] = "pink";
                     
+                    // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
+                    findTheHighlightedSquares(clicked_piece, temp_squareColor, i, j);
+
                     instance.setState({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece },
                         squareColor: temp_squareColor
@@ -46,17 +44,19 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
             }
         break;
 
-        case false:
+        case false: // if the previously selected piece was just an actual chess piece:
             switch (clicked_piece.piece == "") {
-                case true:
+                case true: // previous was a piece + current selection is a blank square
                     //if we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
                     console.log("moved!");
                     //making a copy of the board to be updated
                     let board_copy = [...state.board];
                     // swapping the elements in the board (the current one we clicked with the previous one we clicked)
+                    // note that I override the typescript types using the "as" keyword. This is because initally the indeces are set to "" so they can be either string or number
                     let temp = board_copy[i][j];
                     board_copy[i][j] = board_copy[previous_i as number][previous_j as number];    
                     board_copy[previous_i as number][previous_j as number] = temp;
+
                     // update the board and reset the previous selection to be nothing
                     instance.setState( (prevState:State) => ({
                         board: [...board_copy],
@@ -64,7 +64,7 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                         squareColor: default_squareColor.map((value) => value.slice())
                     }));
                 break;
-                case false:
+                case false: // previous was a piece + current selection is a another piece
                     let temp_squareColor = default_squareColor.map((value) => value.slice());
                     temp_squareColor[i-1][j] = "pink";
                     
@@ -76,35 +76,4 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
             }
         break;
     }
-    
-    // if(previous_value  == "" || clicked_piece.piece != ""){ 
-    //     // if we clicked a non-empty empty square, or if the previous square we clicked was empty
-    //     // We update the previous selected element to be the current one we clicked. instance will be used for comparison with the next click
-        
-    //     let temp_squareColor = [...instance.state.squareColor];
-    //     temp_squareColor[i-1][j] = "pink";
-        
-    //     instance.setState({
-    //         selected_piece: { i : i, j : j, value : clicked_piece.piece },
-    //         squareColor: [...temp_squareColor]
-    //         }
-    //     );
-    
-    // } else if(clicked_piece.piece == "" && previous_value != "") {
-    //     //if we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
-    //     console.log("moved!");
-    //     //making a copy of the board to be updated
-    //     let board_copy = [...state.board];
-    //     // swapping the elements in the board (the current one we clicked with the previous one we clicked)
-    //     let temp = board_copy[i][j];
-    //     board_copy[i][j] = board_copy[previous_i][previous_j];    
-    //     board_copy[previous_i][previous_j] = temp;
-    //     // update the board and reset the previous selection to be nothing
-    //     instance.setState({
-    //         board: [...board_copy],
-    //         selected_piece: { i : "", j : "", value : "" },
-    //         squareColor: state.default_squareColor
-    //     });
-    // }
-
 }

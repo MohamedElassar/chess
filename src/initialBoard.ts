@@ -11,17 +11,25 @@ import lightQueen from '../src/full rez pics/lightQueen.png';
 import darkRook from '../src/full rez pics/darkRook.png';
 import lightRook from '../src/full rez pics/lightRook.png';
 
-interface Piece {
+export interface Move {
+    x: number;
+    y: number;
+}
+
+export interface Piece {
     image: string;
     piece: string;
     color?: string; // optional because blank squares won't have a piece color element
     moved_before?: boolean; // only applies to pawns because their moving options change as the game progressess
+    move?: Move[]; // an array of the type "Move", where each Move is an object with the x and y that define each chess piece's moves
+                    // cool thing is that the property "move" can be of variable length due to this definition "Move[]"
+                    // this is important because some chess pieces have way more possible moves than others  
 }
 
 let dark_Rook:Piece = {
     image: darkRook,
     piece: "Rook",
-    color: "dark"
+    color: "dark",
 };
 
 let dark_Knight:Piece = {
@@ -89,7 +97,17 @@ let light_Pawn:Piece = {
     image: lightPawn,
     piece: "Pawn",
     color: "light",
-    moved_before: false
+    moved_before: false,
+    move: [{
+        x: -1,
+        y: 0
+    }, {
+        x: -1,
+        y: -1
+    }, {
+        x: -1,
+        y: 1
+    }]
 };
 
 let blank:Piece = {
@@ -106,4 +124,4 @@ export let pieces = [
     new Array(8).fill(blank),
     new Array(8).fill(light_Pawn),
     [light_Rook, light_Knight, light_Bishop, light_Queen, light_King, light_Bishop, light_Knight, light_Rook],
-]
+];
