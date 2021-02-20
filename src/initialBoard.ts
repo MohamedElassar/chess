@@ -25,6 +25,7 @@ export interface Piece {
     // an array of the type "Move", where each Move is an object with the x and y that define each chess piece's moves
     // cool thing is that the property "move" can be of variable length due to this definition "Move[]"
     // this is important because some chess pieces have way more possible moves than others  
+    move_Pawn_firstTime?: Move[];
 }
 
 let dark_Rook:Piece = {
@@ -99,10 +100,14 @@ let light_Pawn:Piece = {
     piece: "Pawn",
     color: "light",
     moved_before: false,
-    move: [{
+    move_Pawn_firstTime: [{
         x: -1,
         y: 0
     }, {
+        x: -2,
+        y: 0
+    }],
+    move: [{
         x: -1,
         y: -1
     }, {
