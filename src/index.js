@@ -137,6 +137,7 @@ class App  extends React.Component{
         let clicked_piece = this.state.board[i][j]; 
 
         if(clicked_piece.color !== "dark"){
+            // handle the logic of the user clicking on a valid square
             startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
         
         } else {

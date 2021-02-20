@@ -11,7 +11,13 @@ import lightQueen from '../src/full rez pics/lightQueen.png';
 import darkRook from '../src/full rez pics/darkRook.png';
 import lightRook from '../src/full rez pics/lightRook.png';
 
-let dark_Rook = {
+interface Piece {
+    image: string,
+    piece: string,
+    color: string
+}
+
+let dark_Rook:Piece = {
     image: darkRook,
     piece: "Rook",
     color: "dark"
