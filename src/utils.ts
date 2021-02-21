@@ -31,21 +31,28 @@ export function findTheHighlightedSquares(board_copy:Array<Array<Piece>>, clicke
             moves = clicked_piece.move; // pawn has been moved before; use the set of moves specific to that case
         }
     
-        highlightPawn(temp_squareColor, i, j, moves as Move[]); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
+        highlightFixed(temp_squareColor, i, j, moves as Move[]); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
         return;
     
-    } else if (clicked_piece.piece === "Bishop"){
+    } else if (clicked_piece.piece === "Bishop" || clicked_piece.piece === "Rook" || clicked_piece.piece === "Queen"){
 
         moves = clicked_piece.move;
-        highlightBishop(board_copy, temp_squareColor, i, j, moves as Move[]);
+        highlightDynamic(board_copy, temp_squareColor, i, j, moves as Move[]);
         return;
+    
+    } else if (clicked_piece.piece === "Knight" || clicked_piece.piece === "King"){
+
+        moves = clicked_piece.move;
+        highlightFixed(temp_squareColor, i, j, moves as Move[]);
+        return;
+    
     }
     
 }
 
 /****************************************************************************************************/
 
-function highlightPawn(temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
+function highlightFixed(temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
     if (moves != undefined){ // to be removed: just here for now because I haven't defined the valid moves for all the different pieces, so it could be undefined for anything but a pawn 
         let move_x:number;
         let move_y:number;
@@ -61,19 +68,20 @@ function highlightPawn(temp_squareColor: Array<Array<string>>, i:number, j:numbe
 
 /****************************************************************************************************/
 
-function highlightBishop(board_copy: Array<Array<Piece>>, temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
+function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
     if (moves != undefined){ // to be removed: just here for now because I haven't defined the valid moves for all the different pieces, so it could be undefined for anything but a pawn 
         let move_x:number;
         let move_y:number;
         for(let temp = 0; temp < moves.length; temp++){ // looping through the sets of valid moves (many per piece) and changing the color of those locations in the color array to pink
             
-            for (let count = 1; count < 8; count++){
+            for (let count = 1; count < 8; count++){ // I have to loop through multiple possibilites for each given move; this is to catch the diagonal aspect. e.g. if 1, 1 is a possible move, I need to also check if 2,2 and 3,3, etc. are valid diagonal moves
                 move_x = i + count * moves[temp].x ; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
                 move_y = j + count * moves[temp].y;
                 if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // i dont't know how the code was working without this check??? what if the pawn is on the left edge and we find a valid move to be to the top left? Shoudl be getting out of bounds error but was not ??
                     temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
                 }
             }
+
         }
     }    
 }
@@ -97,11 +105,18 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
             valid_moves = previous.move;
         }    
         // calling isValid to check if the proposed move is valid. it will use the location of the piece, the proposed destination for the piece, and the set of valid moves for the piece
-        isValid = isValidMovePawn(valid_moves as Move[], previous_i as number, previous_j as number, i, j);
+        isValid = isValidMoveFixed(valid_moves as Move[], previous_i as number, previous_j as number, i, j);
     
-    } else {
+    } else if (previous.piece === "Bishop" || previous.piece === "Rook" || previous.piece === "Queen"){
+
         valid_moves = previous.move;
-        isValid = isValidMoveBishop(valid_moves as Move[], previous_i as number, previous_j as number, i, j);
+        isValid = isValidMoveDynamic(valid_moves as Move[], previous_i as number, previous_j as number, i, j);
+        
+    } else {
+
+        valid_moves = previous.move;
+        isValid = isValidMoveFixed(valid_moves as Move[], previous_i as number, previous_j as number, i, j);
+    
     }
     
     if(isValid){
@@ -125,7 +140,7 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
 
 /****************************************************************************************************/
 // checking if move is valid by comparing the indeces of the destination square to all the valid indeces.
-function isValidMovePawn(valid_moves:Move[], previous_i:number, previous_j:number, i:number, j:number) : boolean {
+function isValidMoveFixed(valid_moves:Move[], previous_i:number, previous_j:number, i:number, j:number) : boolean {
     // looping through all valid moves for each piece
     for(let index = 0; index < valid_moves.length ; index++){
         // finding the valid indeces by applying the transformations specific to each piece's valid moves
@@ -142,7 +157,7 @@ function isValidMovePawn(valid_moves:Move[], previous_i:number, previous_j:numbe
 
 /****************************************************************************************************/
 // checking if move is valid by comparing the indeces of the destination square to all the valid indeces.
-function isValidMoveBishop(valid_moves:Move[], previous_i:number, previous_j:number, i:number, j:number) : boolean {
+function isValidMoveDynamic(valid_moves:Move[], previous_i:number, previous_j:number, i:number, j:number) : boolean {
     // looping through all valid moves for each piece
     for(let index = 0; index < valid_moves.length ; index++){
 
@@ -155,16 +170,7 @@ function isValidMoveBishop(valid_moves:Move[], previous_i:number, previous_j:num
                 return true;
             }
         }
-
-
-
-        // // finding the valid indeces by applying the transformations specific to each piece's valid moves
-        // let potential_move_x = previous_i + valid_moves[index].x;
-        // let potential_move_y = previous_j + valid_moves[index].y;
-        // // comparing the indeces of the clicked location to the results of the piece's valid move transformations
-        // if(i === potential_move_x && j === potential_move_y){
-        //     return true;
-        // }
+        
     }
     return false;  
 }

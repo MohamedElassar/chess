@@ -69,12 +69,64 @@ let light_Rook:Piece = {
     image: lightRook,
     piece: "Rook",
     color: "light",
+    move: [
+        {
+            x: 0,
+            y: 1
+        },
+        {
+            x: 0,
+            y: -1
+        },
+        {
+            x: -1,
+            y: 0
+        },
+        {
+            x: 1,
+            y: 0
+        },
+    ]
 };
 
 let light_Knight:Piece = {
     image: lightKnight,
     piece: "Knight",
-    color: "light"
+    color: "light",
+    move: [
+        {
+            x: -1,
+            y: 2
+        },
+        {
+            x: -2,
+            y: 1
+        },
+        {
+            x: -2,
+            y: -1
+        },
+        {
+            x: -1,
+            y: -2
+        },
+        {
+            x: 1,
+            y: -2
+        },
+        {
+            x: 2,
+            y: -1
+        },
+        {
+            x: 2,
+            y: 1
+        },
+        {
+            x: 1,
+            y: 2
+        },
+    ]
 };
 
 let light_Bishop:Piece = {
@@ -104,13 +156,81 @@ let light_Bishop:Piece = {
 let light_Queen:Piece = {
     image: lightQueen,
     piece: "Queen",
-    color: "light"
+    color: "light",
+    move: [
+        {
+            x: -1,
+            y: 1
+        },
+        {
+            x: -1,
+            y: -1
+        },
+        {
+            x: 1,
+            y: 1
+        },
+        {
+            x: 1,
+            y: -1
+        },
+        {
+            x: 0,
+            y: 1
+        },
+        {
+            x: 0,
+            y: -1
+        },
+        {
+            x: -1,
+            y: 0
+        },
+        {
+            x: 1,
+            y: 0
+        }
+    ]
 };
 
 let light_King:Piece = {
     image: lightKing,
     piece: "King",
-    color: "light"
+    color: "light",
+    move:[
+        {
+            x:0,
+            y:1
+        },
+        {
+            x:0,
+            y:-1
+        },
+        {
+            x:-1,
+            y:0
+        },
+        {
+            x:-1,
+            y:-1
+        },
+        {
+            x:-1,
+            y:1
+        },
+        {
+            x:1,
+            y:0
+        },
+        {
+            x:1,
+            y:-1
+        },
+        {
+            x:1,
+            y:1
+        },
+    ]
 };
 
 let light_Pawn:Piece = {
