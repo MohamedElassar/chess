@@ -20,60 +20,66 @@ export function getColor(i : number, j : number) : string  {
 /****************************************************************************************************/
 
 export function findTheHighlightedSquares(clicked_piece : Piece, temp_squareColor: Array<Array<string>>, i:number, j:number){
-    let moves;
+    let moves; // variable used to store the set of valid moves for the piece we clicked. These moves are stored in the Piece object (see initlaBoard)
+    
+    // We have to consider Pawns separately because their valid moves change depending on if it's the first time the pawn is moved
     if(clicked_piece.piece === "Pawn"){
-        if(clicked_piece.moved_before === false){
-            moves = clicked_piece.move_Pawn_firstTime;
+        if(clicked_piece.moved_before === false){ // it's the first time moving this pawn
+            moves = clicked_piece.move_Pawn_firstTime; // use the set of valid moves that are specific to the pawn's first move
         } else {
-            moves = clicked_piece.move;    
+            moves = clicked_piece.move; // pawn has been moved before; use the set of moves specific to that case
         }
     } else {
-        moves = clicked_piece.move;
+        moves = clicked_piece.move; // if piece is not a pawn, just use its valid moves. could be written better
     }
     
-    highlight(temp_squareColor, i, j, moves as Move[]);
+    highlight(temp_squareColor, i, j, moves as Move[]); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
 }
 
 /****************************************************************************************************/
 
 function highlight(temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
-    if (moves != undefined){
+    if (moves != undefined){ // to be removed: just here for now because I haven't defined the valid moves for all the different pieces, so it could be undefined for anything but a pawn 
         let move_x:number;
         let move_y:number;
-        for(let temp = 0; temp < moves.length; temp++){
-            move_x = moves[temp].x ; 
-            move_y = moves[temp].y;
-            temp_squareColor[i + move_x][j + move_y] = "pink"
+        for(let temp = 0; temp < moves.length; temp++){ // looping through the sets of valid moves (many per piece) and changing the color of those locations in the color array to pink
+            move_x = i + moves[temp].x ; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
+            move_y = j + moves[temp].y;
+            if(move_x < 8 && move_y < 8){ // i dont't know how the code was working without this check??? what if the pawn is on the left edge and we find a valid move to be to the top left? Shoudl be getting out of bounds error but was not ??
+                temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+            }
         }
     }    
 }
 
 /****************************************************************************************************/
-
+// function to analyze if the location the user clicked is a valid move for the piece they previously clicked
 export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number, instance:any, default_squareColor:Array<Array<string>>  ){
     
+    // value and location of the previously clicked piece
     let previous = board_copy[previous_i][previous_j];
 
     let valid_moves;
 
+    // to be changed: right now, just worrying about pawns because they can have 2 different valid move scenarios
     if(previous.piece === "Pawn" && previous.moved_before === false){
         valid_moves = previous.move_Pawn_firstTime;
     } else if(previous.piece === "Pawn" && previous.moved_before === true) {
         valid_moves = previous.move;
     }
     
+    // calling isValid to check if the proposed move is valid. it will use the location of the piece, the proposed destination for the piece, and the set of valid moves for the piece
     let isValid:boolean = isValidMove(valid_moves as Move[], previous_i as number, previous_j as number, i, j);
 
     if(isValid){
-
+        // swapping the elements in the board (the current one we clicked with the previous one we clicked)
         swap(board_copy, i, j, previous_i, previous_j);
         console.log("moved!");
 
+        // specific to pawns: after moving them for the first time, we have to set their moved_before attribute to true. This will enable us to use their second set of valid moves next time we want to move the same pawn
         if(board_copy[i][j].piece === "Pawn" && board_copy[i][j].moved_before === false){
             board_copy[i][j].moved_before = true;
         }
-
-        console.log(board_copy);
 
         // update the board and reset the previous selection to be nothing
         instance.setState( () => ({
@@ -85,11 +91,14 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
 } 
 
 /****************************************************************************************************/
-
+// checking if move is valid by comparing the indeces of the destination square to all the valid indeces.
 function isValidMove(valid_moves:Move[], previous_i:number, previous_j:number, i:number, j:number) : boolean {
+    // looping through all valid moves for each piece
     for(let index = 0; index < valid_moves.length ; index++){
+        // finding the valid indeces by applying the transformations specific to each piece's valid moves
         let potential_move_x = previous_i + valid_moves[index].x;
         let potential_move_y = previous_j + valid_moves[index].y;
+        // comparing the indeces of the clicked location to the results of the piece's valid move transformations
         if(i === potential_move_x && j === potential_move_y){
             return true;
         }
@@ -98,7 +107,7 @@ function isValidMove(valid_moves:Move[], previous_i:number, previous_j:number, i
 }
 
 /****************************************************************************************************/
-
+// swapping the piece with the valid destination
 function swap(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number){
     let temp = board_copy[i][j];
     board_copy[i][j] = board_copy[previous_i][previous_j];

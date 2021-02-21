@@ -14,8 +14,16 @@ interface State {
     instance: this;
 }
 
+/*
+function to handle 4 situations: 
+1) clicking an empty box after clicking an empty box 
+2) clicking on a piece after clicking an empty box 
+3) clicking on an empty box after clicking on a piece
+4) clicking on a piece after clicking on a piece
+*/
 export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Piece, state:State, default_squareColor:Array<Array<string>>) {
 
+    // the value (e.g. "Pawn", "", etc.) and location of the click before the one we're currently analyzing
     let previous_value = state.selected_piece.value;
     let previous_i = state.selected_piece.i;
     let previous_j = state.selected_piece.j;
@@ -30,8 +38,9 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                         squareColor: default_squareColor
                         }));
                 break;
-                case false: 
-                    // previous was blank + current selection is a chess piece make a copy of the default square color array (brown squares)
+                case false: // previous was blank + current selection is a chess piece 
+
+                    // make a copy of the default square color array (brown squares) because we're about to change it to have the valid moves highlighted
                     let temp_squareColor = JSON.parse(JSON.stringify(default_squareColor));
                     
                     // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
@@ -39,7 +48,7 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
 
                     instance.setState({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece },
-                        squareColor: temp_squareColor // update the board to have highlighted pieces indicating valid moves
+                        squareColor: JSON.parse(JSON.stringify(temp_squareColor)) // update the board to have highlighted pieces indicating valid moves
                         });
                 break;
             }
@@ -47,12 +56,12 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
 
         case false: // if the previously selected piece was an actual chess piece:
             switch (clicked_piece.piece === "") {
-                case true: // previous was a piece + current selection is a blank square if we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
+                case true: // previous was a piece + current selection is a blank square. If we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
 
                     //making a copy of the board to be updated
                     let board_copy = JSON.parse(JSON.stringify(state.board));
                     
-                    // swapping the elements in the board (the current one we clicked with the previous one we clicked). function is in ./utils.ts
+                    // makeMove will analyze if the proposed move is valid and will alter the board accordingly
                     // note that I override the typescript types using the "as" keyword. This is because initally the indeces are set to "" so they can be either string or number
                     makeMove(board_copy, i, j, previous_i as number, previous_j as number, instance, default_squareColor);
 
@@ -60,11 +69,12 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                 case false: // previous was a piece + current selection is a another piece
                     let temp_squareColor = default_squareColor.map((value) => value.slice());
 
+                    // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
                     findTheHighlightedSquares(clicked_piece, temp_squareColor, i, j);
 
                     instance.setState({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece },
-                        squareColor: temp_squareColor
+                        squareColor: JSON.parse(JSON.stringify(temp_squareColor)) // update the board to have highlighted pieces indicating valid moves
                         });
                 break;
             }

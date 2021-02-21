@@ -123,21 +123,20 @@ class App  extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            board: JSON.parse(JSON.stringify(pieces)), //board is an array of objects. Object.image, Object.color, and Object.piece are the attributes we're storing
+            board: JSON.parse(JSON.stringify(pieces)), //board is an array of the "pieces" object. See ./initialBoard for object properties. Using JSON parse and stringify to deep clone the array "pieces"
             selected_piece: { i : "", j : "", value : "" },
-            // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
-            squareColor: new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  ),
+            squareColor: new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  ), // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
         }
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(i, j){
         
-        //an object with info about the box we just clicked info about the previously clicked element that was clicked prior to this current click
+        //an object with info about the box we just clicked
         let clicked_piece =   this.state.board[i][j];
 
         if(clicked_piece.color !== "dark"){
-            // handle the logic of the user clicking on a valid square
+            // handle the logic of the user clicking on a non-dark square
             startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
         } else {
             // do nothing; we clicked a dark piece which we shouldn't be able to    
