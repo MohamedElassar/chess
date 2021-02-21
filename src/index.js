@@ -123,7 +123,7 @@ class App  extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            board: pieces, //board is an array of objects. Object.image, Object.color, and Object.piece are the attributes we're storing
+            board: JSON.parse(JSON.stringify(pieces)), //board is an array of objects. Object.image, Object.color, and Object.piece are the attributes we're storing
             selected_piece: { i : "", j : "", value : "" },
             // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
             squareColor: new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  ),
@@ -134,7 +134,7 @@ class App  extends React.Component{
     handleClick(i, j){
         
         //an object with info about the box we just clicked info about the previously clicked element that was clicked prior to this current click
-        let clicked_piece = this.state.board[i][j]; 
+        let clicked_piece =   this.state.board[i][j];
 
         if(clicked_piece.color !== "dark"){
             // handle the logic of the user clicking on a valid square

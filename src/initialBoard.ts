@@ -121,6 +121,7 @@ let blank:Piece = {
     piece: ""
 }
 
+
 export let pieces = [
     [dark_Rook, dark_Knight, dark_Bishop, dark_Queen, dark_King, dark_Bishop, dark_Knight, dark_Rook],
     new Array(8).fill(dark_Pawn),
@@ -128,6 +129,6 @@ export let pieces = [
     new Array(8).fill(blank),
     new Array(8).fill(blank),
     new Array(8).fill(blank),
-    new Array(8).fill(light_Pawn),
-    [light_Rook, light_Knight, light_Bishop, light_Queen, light_King, light_Bishop, light_Knight, light_Rook],
+    new Array(8).fill(Object.assign({}, light_Pawn)),
+    [light_Rook, light_Knight, light_Bishop, light_Queen, light_King, light_Bishop, light_Knight, light_Rook]
 ];

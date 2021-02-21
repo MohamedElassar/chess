@@ -21,11 +21,16 @@ export function getColor(i : number, j : number) : string  {
 
 export function findTheHighlightedSquares(clicked_piece : Piece, temp_squareColor: Array<Array<string>>, i:number, j:number){
     let moves;
-    if(clicked_piece.piece === "Pawn" && clicked_piece.moved_before === false){
-        moves = clicked_piece.move_Pawn_firstTime;
+    if(clicked_piece.piece === "Pawn"){
+        if(clicked_piece.moved_before === false){
+            moves = clicked_piece.move_Pawn_firstTime;
+        } else {
+            moves = clicked_piece.move;    
+        }
     } else {
         moves = clicked_piece.move;
     }
+    
     highlight(temp_squareColor, i, j, moves as Move[]);
 }
 
@@ -53,20 +58,28 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
 
     if(previous.piece === "Pawn" && previous.moved_before === false){
         valid_moves = previous.move_Pawn_firstTime;
-    } else {
+    } else if(previous.piece === "Pawn" && previous.moved_before === true) {
         valid_moves = previous.move;
     }
     
     let isValid:boolean = isValidMove(valid_moves as Move[], previous_i as number, previous_j as number, i, j);
 
     if(isValid){
+
         swap(board_copy, i, j, previous_i, previous_j);
-        // update the board and reset the previous selection to be nothing
         console.log("moved!");
+
+        if(board_copy[i][j].piece === "Pawn" && board_copy[i][j].moved_before === false){
+            board_copy[i][j].moved_before = true;
+        }
+
+        console.log(board_copy);
+
+        // update the board and reset the previous selection to be nothing
         instance.setState( () => ({
-            board: [...board_copy],
+            board: JSON.parse(JSON.stringify(board_copy)),
             selected_piece: { i : "", j : "", value : "" },
-            squareColor: default_squareColor.map((value) => value.slice())
+            squareColor: JSON.parse(JSON.stringify(default_squareColor))
         }));
     }
 } 
@@ -90,8 +103,4 @@ function swap(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: 
     let temp = board_copy[i][j];
     board_copy[i][j] = board_copy[previous_i][previous_j];
     board_copy[previous_i][previous_j] = temp;
-
-    if(board_copy[i][j].piece === "Pawn"){
-        board_copy[i][j].moved_before = true;
-    }
 }

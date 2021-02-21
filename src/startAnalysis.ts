@@ -32,7 +32,7 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                 break;
                 case false: 
                     // previous was blank + current selection is a chess piece make a copy of the default square color array (brown squares)
-                    let temp_squareColor = default_squareColor.map((value) => value.slice());
+                    let temp_squareColor = JSON.parse(JSON.stringify(default_squareColor));
                     
                     // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
                     findTheHighlightedSquares(clicked_piece, temp_squareColor, i, j);
@@ -50,7 +50,7 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                 case true: // previous was a piece + current selection is a blank square if we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
 
                     //making a copy of the board to be updated
-                    let board_copy = state.board.map( (value) => value.slice() );
+                    let board_copy = JSON.parse(JSON.stringify(state.board));
                     
                     // swapping the elements in the board (the current one we clicked with the previous one we clicked). function is in ./utils.ts
                     // note that I override the typescript types using the "as" keyword. This is because initally the indeces are set to "" so they can be either string or number
