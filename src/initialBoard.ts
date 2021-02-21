@@ -80,7 +80,25 @@ let light_Knight:Piece = {
 let light_Bishop:Piece = {
     image: lightBishop,
     piece: "Bishop",
-    color: "light"
+    color: "light", 
+    move: [
+        {
+            x: -1,
+            y: 1
+        },
+        {
+            x: -1,
+            y: -1
+        },
+        {
+            x: 1,
+            y: 1
+        },
+        {
+            x: 1,
+            y: -1
+        },
+    ]
 };
 
 let light_Queen:Piece = {
@@ -123,12 +141,12 @@ let blank:Piece = {
 
 
 export let pieces = [
-    [dark_Rook, dark_Knight, dark_Bishop, dark_Queen, dark_King, dark_Bishop, dark_Knight, dark_Rook],
-    new Array(8).fill(dark_Pawn),
+    [Object.assign({}, dark_Rook), Object.assign({}, dark_Knight), Object.assign({}, dark_Bishop), dark_Queen, dark_King, Object.assign({}, dark_Bishop), Object.assign({}, dark_Knight), Object.assign({}, dark_Rook)],
+    new Array(8).fill(Object.assign({}, dark_Pawn)),
     new Array(8).fill(blank),
     new Array(8).fill(blank),
     new Array(8).fill(blank),
     new Array(8).fill(blank),
     new Array(8).fill(Object.assign({}, light_Pawn)),
-    [light_Rook, light_Knight, light_Bishop, light_Queen, light_King, light_Bishop, light_Knight, light_Rook]
+    [Object.assign({}, light_Rook), Object.assign({}, light_Knight), Object.assign({}, light_Bishop), light_Queen, light_King, Object.assign({}, light_Bishop), Object.assign({}, light_Knight), Object.assign({}, light_Rook)],
 ];

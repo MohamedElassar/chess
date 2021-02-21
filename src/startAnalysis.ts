@@ -28,6 +28,12 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
     let previous_i = state.selected_piece.i;
     let previous_j = state.selected_piece.j;
 
+    //making a copy of the board to be updated
+    let board_copy = JSON.parse(JSON.stringify(state.board));
+
+    // make a copy of the default square color array (brown squares) because we're about to change it to have the valid moves highlighted
+    let temp_squareColor = JSON.parse(JSON.stringify(default_squareColor));
+
     switch (previous_value === "") {
 
         case true: // if the previously selected piece was just an empty square:
@@ -40,11 +46,8 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                 break;
                 case false: // previous was blank + current selection is a chess piece 
 
-                    // make a copy of the default square color array (brown squares) because we're about to change it to have the valid moves highlighted
-                    let temp_squareColor = JSON.parse(JSON.stringify(default_squareColor));
-                    
                     // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
-                    findTheHighlightedSquares(clicked_piece, temp_squareColor, i, j);
+                    findTheHighlightedSquares(board_copy, clicked_piece, temp_squareColor, i, j);
 
                     instance.setState({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece },
@@ -57,9 +60,6 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
         case false: // if the previously selected piece was an actual chess piece:
             switch (clicked_piece.piece === "") {
                 case true: // previous was a piece + current selection is a blank square. If we clicked a blank square with our previous selection being a non-empty square i.e. we'll start to analyze if a move is ok
-
-                    //making a copy of the board to be updated
-                    let board_copy = JSON.parse(JSON.stringify(state.board));
                     
                     // makeMove will analyze if the proposed move is valid and will alter the board accordingly
                     // note that I override the typescript types using the "as" keyword. This is because initally the indeces are set to "" so they can be either string or number
@@ -67,10 +67,9 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
 
                 break;
                 case false: // previous was a piece + current selection is a another piece
-                    let temp_squareColor = default_squareColor.map((value) => value.slice());
 
                     // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
-                    findTheHighlightedSquares(clicked_piece, temp_squareColor, i, j);
+                    findTheHighlightedSquares(board_copy, clicked_piece, temp_squareColor, i, j);
 
                     instance.setState({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece },

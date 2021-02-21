@@ -23,7 +23,6 @@ const Square = (props) => {
 class ChessBoard extends React.Component {
     
     renderSquare(i, j){
-        let color = getColor(i, j);
         return <Square 
                     image={this.props.pieces[i][j].image}  
                     onClick={() => this.props.handleClick(i, j)} 
@@ -119,6 +118,14 @@ class ChessBoard extends React.Component {
     }
 }
 
+let TurnTracker = (props) => {
+    return(
+        <div style={{color: "white"}}>
+            {props.value}'s turn
+        </div>
+    );
+}
+
 class App  extends React.Component{
     constructor(props){
         super(props);
@@ -126,12 +133,12 @@ class App  extends React.Component{
             board: JSON.parse(JSON.stringify(pieces)), //board is an array of the "pieces" object. See ./initialBoard for object properties. Using JSON parse and stringify to deep clone the array "pieces"
             selected_piece: { i : "", j : "", value : "" },
             squareColor: new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  ), // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
+            turn: "white"
         }
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(i, j){
-        
         //an object with info about the box we just clicked
         let clicked_piece =   this.state.board[i][j];
 
@@ -145,9 +152,13 @@ class App  extends React.Component{
 
     render(){
         return(
-            <div id="board-wrapper">
-                <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
+            <div>
+                <div id="board-wrapper">
+                    <TurnTracker value={this.state.turn} />
+                    <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
+                </div>
             </div>
+            
         );
     }   
 }
