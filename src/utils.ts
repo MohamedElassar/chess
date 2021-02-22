@@ -31,7 +31,7 @@ export function findTheHighlightedSquares(board_copy:Array<Array<Piece>>, clicke
             moves = clicked_piece.move; // pawn has been moved before; use the set of moves specific to that case
         }
     
-        highlightFixed(temp_squareColor, i, j, moves as Move[]); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
+        highlightFixed(board_copy, temp_squareColor, i, j, moves as Move[]); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
         return;
     
     } else if (clicked_piece.piece === "Bishop" || clicked_piece.piece === "Rook" || clicked_piece.piece === "Queen"){
@@ -43,7 +43,7 @@ export function findTheHighlightedSquares(board_copy:Array<Array<Piece>>, clicke
     } else if (clicked_piece.piece === "Knight" || clicked_piece.piece === "King"){
 
         moves = clicked_piece.move;
-        highlightFixed(temp_squareColor, i, j, moves as Move[]);
+        highlightFixed(board_copy, temp_squareColor, i, j, moves as Move[]);
         return;
     
     }
@@ -51,23 +51,28 @@ export function findTheHighlightedSquares(board_copy:Array<Array<Piece>>, clicke
 }
 
 /****************************************************************************************************/
-
-function highlightFixed(temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
+// function to find the spots to highlight on the puzzle for pieces with a fixed pattern of movement i.e. no diagonals / no moves that extend to either end of the puzzle
+// applies to Pawn, Knight, King BUT Knights are the only puzzle piece that can skip over other pieces
+function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
     if (moves != undefined){ // to be removed: just here for now because I haven't defined the valid moves for all the different pieces, so it could be undefined for anything but a pawn 
         let move_x:number;
         let move_y:number;
         for(let temp = 0; temp < moves.length; temp++){ // looping through the sets of valid moves (many per piece) and changing the color of those locations in the color array to pink
             move_x = i + moves[temp].x ; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
             move_y = j + moves[temp].y;
-            if(move_x < 8 && move_y < 8){ // i dont't know how the code was working without this check??? what if the pawn is on the left edge and we find a valid move to be to the top left? Shoudl be getting out of bounds error but was not ??
-                temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+            if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // check to ensure that we don't get a "index out of bound" error 
+                if(board_copy[move_x][move_y].piece == ""){ // check to only highlight the pieces that are not occupied by other squares
+                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+                }
             }
         }
     }    
 }
 
 /****************************************************************************************************/
-
+// function to find the spots to highlight on the puzzle for pieces with a dynamic pattern of movement i.e. diagonals, moves that extend to either end of the puzzle
+// applies to Bishops, Queens, Rooks
+// NOTE: these pieces CANNOT skip over pieces in their proposed path 
 function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]){    
     if (moves != undefined){ // to be removed: just here for now because I haven't defined the valid moves for all the different pieces, so it could be undefined for anything but a pawn 
         let move_x:number;
@@ -77,8 +82,12 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Arr
             for (let count = 1; count < 8; count++){ // I have to loop through multiple possibilites for each given move; this is to catch the diagonal aspect. e.g. if 1, 1 is a possible move, I need to also check if 2,2 and 3,3, etc. are valid diagonal moves
                 move_x = i + count * moves[temp].x ; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
                 move_y = j + count * moves[temp].y;
-                if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // i dont't know how the code was working without this check??? what if the pawn is on the left edge and we find a valid move to be to the top left? Shoudl be getting out of bounds error but was not ??
-                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+                if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // check to ensure that we don't get a "index out of bound" error
+                    if(board_copy[move_x][move_y].piece == ""){  // only highlighting if the square isn't occupied. else, we're going to quit this sequence of moves and try a different pattern. Ror example, this check will stop a bishop's diagonal from coloring over occupied pieces
+                        temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+                    } else {
+                        break; // found an existing piece along a proposed path; will exit and move to the next proposed element in the move[] array
+                    }
                 }
             }
 

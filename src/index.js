@@ -132,7 +132,7 @@ class App  extends React.Component{
         this.state = {
             board: JSON.parse(JSON.stringify(pieces)), //board is an array of the "pieces" object. See ./initialBoard for object properties. Using JSON parse and stringify to deep clone the array "pieces"
             selected_piece: { i : "", j : "", value : "" },
-            squareColor: new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  ), // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
+            squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
             turn: "white"
         }
         this.handleClick = this.handleClick.bind(this);
@@ -140,7 +140,7 @@ class App  extends React.Component{
 
     handleClick(i, j){
         //an object with info about the box we just clicked
-        let clicked_piece =   this.state.board[i][j];
+        let clicked_piece = this.state.board[i][j];
 
         if(clicked_piece.color !== "dark"){
             // handle the logic of the user clicking on a non-dark square
@@ -158,7 +158,6 @@ class App  extends React.Component{
                     <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
                 </div>
             </div>
-            
         );
     }   
 }
