@@ -72,7 +72,7 @@ function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Arra
             move_y = j + moves[temp].y;
             if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // check to ensure that we don't get a "index out of bound" error 
                 
-                if(board_copy[move_x][move_y].piece == ""){ // check to only highlight the pieces that are not occupied by other squares
+                if(board_copy[move_x][move_y].piece == "" || board_copy[move_x][move_y].color != board_copy[i][j].color){ // check to only highlight the pieces that are not occupied by pieces of the same color
                     
                     temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
                     // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
@@ -113,22 +113,35 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Arr
         let move_y:number;
         let valid_moves: Array<Move> = [];
 
-        
         for(let temp = 0; temp < moves.length; temp++){ // looping through the sets of valid moves (many per piece) and changing the color of those locations in the color array to pink
             
             for (let count = 1; count < 8; count++){ // I have to loop through multiple possibilites for each given move; this is to catch the diagonal aspect. e.g. if 1, 1 is a possible move, I need to also check if 2,2 and 3,3, etc. are valid diagonal moves
+                
                 move_x = i + count * moves[temp].x ; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
                 move_y = j + count * moves[temp].y;
+                
                 if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // check to ensure that we don't get a "index out of bound" error
-                    if(board_copy[move_x][move_y].piece == ""){  // only highlighting if the square isn't occupied. else, we're going to quit this sequence of moves and try a different pattern. Ror example, this check will stop a bishop's diagonal from coloring over occupied pieces
+                    
+                    if(board_copy[move_x][move_y].piece == ""){  // highlighting an empty square in the piece's proposed path
                         temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
                         valid_moves.push(
                             {
                             x: move_x, 
                             y: move_y 
                             });
+                        
+                    } else if (board_copy[move_x][move_y].color != board_copy[i][j].color) { // highlighting a non-empty square that must be of the opposite color. This shows that we can capture this piece
+                    
+                        temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+                        valid_moves.push(
+                            {
+                            x: move_x, 
+                            y: move_y 
+                            });
+                        break; // breaking because we can't skip over the enemy piece that we found on our path
+                    
                     } else {
-                        break; // found an existing piece along a proposed path; will exit and move to the next proposed element in the move[] array
+                        break; // we must've come across a piece of the same color in our path. Thus, we break and try a different pattern
                     }
                 }
             }
