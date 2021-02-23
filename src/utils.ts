@@ -82,7 +82,7 @@ function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Arra
                         x: move_x, 
                         y: move_y 
                         });
-                
+                //ddd
                 } else {
                     
                     if(board_copy[i][j].piece === "Pawn"){ // if this is true, this means my pawn (which hasn't moved before) has another piece infront of it and so can't skip it
