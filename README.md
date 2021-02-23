@@ -1,6 +1,6 @@
-# To play, visit: https://mohamedelassar.github.io/chess/
+## To play, visit: https://mohamedelassar.github.io/chess/
 
-#################################################################################################
+---
 
 # Getting Started with Create React App
 
