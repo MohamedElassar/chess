@@ -238,20 +238,31 @@ let light_Pawn:Piece = {
     piece: "Pawn",
     color: "light",
     moved_before: false,
-    move_Pawn_firstTime: [{
-        x: -1,
-        y: 0
-    }, {
-        x: -2,
-        y: 0
-    }],
-    move: [{
-        x: -1,
-        y: -1
-    }, {
-        x: -1,
-        y: 1
-    }]
+    move_Pawn_firstTime: [
+        {
+            x: -1,
+            y: 0
+        }, 
+        {
+            x: -2,
+            y: 0
+        }
+    ],
+    move: [
+        {
+            x: -1,
+            y: 0
+        }
+        // {
+        //     x: -1,
+        //     y: -1
+        // }, 
+        // {
+        //     x: -1,
+        //     y: 1
+        // }
+
+    ]
 };
 
 let blank:Piece = {

@@ -131,7 +131,7 @@ class App  extends React.Component{
         super(props);
         this.state = {
             board: JSON.parse(JSON.stringify(pieces)), //board is an array of the "pieces" object. See ./initialBoard for object properties. Using JSON parse and stringify to deep clone the array "pieces"
-            selected_piece: { i : "", j : "", value : "" },
+            selected_piece: { i : "", j : "", value : "", validCoordinates: [] },
             squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
             turn: "white"
         }
