@@ -144,7 +144,8 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Arr
 
 /****************************************************************************************************/
 // function to analyze if the location the user clicked is a valid move for the piece they previously clicked
-export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number, validLocationsToMoveTo: Array<Move>, instance:any, default_squareColor:Array<Array<string>>  ){
+export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number, 
+    validLocationsToMoveTo: Array<Move>, instance:any, default_squareColor:Array<Array<string>>, player_turn: string){
 
     let isValid:boolean = isValidMove(i, j, validLocationsToMoveTo);
     
@@ -158,11 +159,19 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
             board_copy[i][j].moved_before = true;
         }
 
+        // we successfully made a move. now we need to switch the turns so that the opposite color can play
+        if(player_turn === "light"){
+            player_turn = "dark";
+        } else {
+            player_turn = "light";
+        }
+
         // update the board and reset the previous selection to be nothing
         instance.setState( () => ({
             board: JSON.parse(JSON.stringify(board_copy)),
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // resetting the selection to nothing and the validcoordinates to nothing
             squareColor: JSON.parse(JSON.stringify(default_squareColor)),
+            turn: player_turn // update the color of the turn
         }));
     }
 

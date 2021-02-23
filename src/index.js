@@ -133,7 +133,7 @@ class App  extends React.Component{
             board: JSON.parse(JSON.stringify(pieces)), //board is an array of the "pieces" object. See ./initialBoard for object properties. Using JSON parse and stringify to deep clone the array "pieces"
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] },
             squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
-            turn: "white"
+            turn: "light"
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -142,11 +142,13 @@ class App  extends React.Component{
         //an object with info about the box we just clicked
         let clicked_piece = this.state.board[i][j];
 
-        if(clicked_piece.color !== "dark"){
-            // handle the logic of the user clicking on a non-dark square
+        let clicked_piece_color = clicked_piece.color;
+
+        if(clicked_piece_color === this.state.turn || clicked_piece_color === "" ){ // only allow plater to move the pieces in the correct turn. if the current turn is white and they click a black piece, no analysis takes place
+            // handle the logic of the user clicking on a square in their correct turn
             startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
         } else {
-            // do nothing; we clicked a dark piece which we shouldn't be able to    
+            // do nothing; we clicked a piece that we shouldn't control.    
         }
     }
 

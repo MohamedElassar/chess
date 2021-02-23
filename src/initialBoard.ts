@@ -19,7 +19,7 @@ export interface Move {
 export interface Piece {
     image: string;
     piece: string;
-    color?: string; // optional because blank squares won't have a piece color element
+    color: string; // optional because blank squares won't have a piece color element
     moved_before?: boolean; // only applies to pawns because their moving options change as the game progressess
     move?: Move[]; 
     // an array of the type "Move", where each Move is an object with the x and y that define each chess piece's moves
@@ -32,37 +32,191 @@ let dark_Rook:Piece = {
     image: darkRook,
     piece: "Rook",
     color: "dark",
+    move: [
+        {
+            x: 0,
+            y: 1
+        },
+        {
+            x: 0,
+            y: -1
+        },
+        {
+            x: -1,
+            y: 0
+        },
+        {
+            x: 1,
+            y: 0
+        },
+    ]
 };
 
 let dark_Knight:Piece = {
     image: darkKnight,
     piece: "Knight",
-    color: "dark"
+    color: "dark",
+    move: [
+        {
+            x: -1,
+            y: 2
+        },
+        {
+            x: -2,
+            y: 1
+        },
+        {
+            x: -2,
+            y: -1
+        },
+        {
+            x: -1,
+            y: -2
+        },
+        {
+            x: 1,
+            y: -2
+        },
+        {
+            x: 2,
+            y: -1
+        },
+        {
+            x: 2,
+            y: 1
+        },
+        {
+            x: 1,
+            y: 2
+        },
+    ]
 };
 
 let dark_Bishop:Piece = {
     image: darkBishop,
     piece: "Bishop",
-    color: "dark"
+    color: "dark",
+    move: [
+        {
+            x: -1,
+            y: 1
+        },
+        {
+            x: -1,
+            y: -1
+        },
+        {
+            x: 1,
+            y: 1
+        },
+        {
+            x: 1,
+            y: -1
+        },
+    ]
 };
 
 let dark_Queen:Piece = {
     image: darkQueen,
     piece: "Queen",
-    color: "dark"
+    color: "dark",
+    move: [
+        {
+            x: -1,
+            y: 1
+        },
+        {
+            x: -1,
+            y: -1
+        },
+        {
+            x: 1,
+            y: 1
+        },
+        {
+            x: 1,
+            y: -1
+        },
+        {
+            x: 0,
+            y: 1
+        },
+        {
+            x: 0,
+            y: -1
+        },
+        {
+            x: -1,
+            y: 0
+        },
+        {
+            x: 1,
+            y: 0
+        }
+    ]
 };
 
 let dark_King:Piece = {
     image: darkKing,
     piece: "King",
-    color: "dark"
+    color: "dark",
+    move:[
+        {
+            x:0,
+            y:1
+        },
+        {
+            x:0,
+            y:-1
+        },
+        {
+            x:-1,
+            y:0
+        },
+        {
+            x:-1,
+            y:-1
+        },
+        {
+            x:-1,
+            y:1
+        },
+        {
+            x:1,
+            y:0
+        },
+        {
+            x:1,
+            y:-1
+        },
+        {
+            x:1,
+            y:1
+        },
+    ]
 };
 
 let dark_Pawn:Piece = {
     image: darkPawn,
     piece: "Pawn",
     color: "dark",
-    moved_before: false
+    moved_before: false,
+    move_Pawn_firstTime: [
+        {
+            x: 1,
+            y: 0
+        }, 
+        {
+            x: 2,
+            y: 0
+        }
+    ],
+    move: [
+        {
+            x: 1,
+            y: 0
+        }
+    ]
 };
 
 let light_Rook:Piece = {
@@ -267,7 +421,8 @@ let light_Pawn:Piece = {
 
 let blank:Piece = {
     image: "",
-    piece: ""
+    piece: "",
+    color: ""
 }
 
 

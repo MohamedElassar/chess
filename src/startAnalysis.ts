@@ -13,6 +13,7 @@ interface State {
     selected_piece: SelectedPiece;
     squareColor: Array<Array<string>>;
     instance: this;
+    turn: string;
 }
 
 /*
@@ -28,6 +29,9 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
     let previous_value = state.selected_piece.value;
     let previous_i = state.selected_piece.i;
     let previous_j = state.selected_piece.j;
+
+    // color of the current turn
+    let player_turn = state.turn;
 
     // the array [{x:5, y:4}, ..., {x:6, y:6}] holds the valid moves of the piece we previously clicked. will be used for comparison against (x,y) if we click on an empty square after clicking on a piece
     let validMoves = state.selected_piece.validCoordinates;
@@ -70,9 +74,9 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                     
                     // makeMove will analyze if the proposed move is valid and will alter the board accordingly
                     // note that I override the typescript types using the "as" keyword. This is because initally the indeces are set to "" so they can be either string or number
-                    makeMove(board_copy, i, j, previous_i as number, previous_j as number, validLocationsToMoveTo, instance, default_squareColor);
+                    makeMove(board_copy, i, j, previous_i as number, previous_j as number, validLocationsToMoveTo, instance, default_squareColor, player_turn);
 
-                break;
+                break; 
                 case false: // previous was a piece + current selection is a another piece
 
                     // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
