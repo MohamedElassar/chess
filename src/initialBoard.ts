@@ -31,7 +31,7 @@ export interface Piece {
 let dark_Rook:Piece = {
     image: darkRook,
     piece: "Rook",
-    color: "dark",
+    color: "black",
     move: [
         {
             x: 0,
@@ -55,7 +55,7 @@ let dark_Rook:Piece = {
 let dark_Knight:Piece = {
     image: darkKnight,
     piece: "Knight",
-    color: "dark",
+    color: "black",
     move: [
         {
             x: -1,
@@ -95,7 +95,7 @@ let dark_Knight:Piece = {
 let dark_Bishop:Piece = {
     image: darkBishop,
     piece: "Bishop",
-    color: "dark",
+    color: "black",
     move: [
         {
             x: -1,
@@ -119,7 +119,7 @@ let dark_Bishop:Piece = {
 let dark_Queen:Piece = {
     image: darkQueen,
     piece: "Queen",
-    color: "dark",
+    color: "black",
     move: [
         {
             x: -1,
@@ -159,7 +159,7 @@ let dark_Queen:Piece = {
 let dark_King:Piece = {
     image: darkKing,
     piece: "King",
-    color: "dark",
+    color: "black",
     move:[
         {
             x:0,
@@ -199,7 +199,7 @@ let dark_King:Piece = {
 let dark_Pawn:Piece = {
     image: darkPawn,
     piece: "Pawn",
-    color: "dark",
+    color: "black",    
     moved_before: false,
     move_Pawn_firstTime: [
         {
@@ -222,7 +222,7 @@ let dark_Pawn:Piece = {
 let light_Rook:Piece = {
     image: lightRook,
     piece: "Rook",
-    color: "light",
+    color: "white",
     move: [
         {
             x: 0,
@@ -246,7 +246,7 @@ let light_Rook:Piece = {
 let light_Knight:Piece = {
     image: lightKnight,
     piece: "Knight",
-    color: "light",
+    color: "white",
     move: [
         {
             x: -1,
@@ -286,7 +286,7 @@ let light_Knight:Piece = {
 let light_Bishop:Piece = {
     image: lightBishop,
     piece: "Bishop",
-    color: "light", 
+    color: "white",
     move: [
         {
             x: -1,
@@ -310,7 +310,7 @@ let light_Bishop:Piece = {
 let light_Queen:Piece = {
     image: lightQueen,
     piece: "Queen",
-    color: "light",
+    color: "white",
     move: [
         {
             x: -1,
@@ -350,7 +350,7 @@ let light_Queen:Piece = {
 let light_King:Piece = {
     image: lightKing,
     piece: "King",
-    color: "light",
+    color: "white",
     move:[
         {
             x:0,
@@ -390,7 +390,7 @@ let light_King:Piece = {
 let light_Pawn:Piece = {
     image: lightPawn,
     piece: "Pawn",
-    color: "light",
+    color: "white",
     moved_before: false,
     move_Pawn_firstTime: [
         {

@@ -92,6 +92,8 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
     }
 }
 
+/**************************************************************************************************************************************************************/
+
 export function canCapture(instance:any, state: State, i:number, j:number, clicked_piece:Piece, default_squareColor:Array<Array<string>>){
 
     // the value (e.g. "Pawn", "", etc.) and location of the click before the one we're currently analyzing
@@ -109,13 +111,20 @@ export function canCapture(instance:any, state: State, i:number, j:number, click
         let valid_x = valid_moves[index].x;
         let valid_y = valid_moves[index].y;
         if(i === valid_x && j === valid_y){
+            let temp = board_copy[i][j];
             board_copy[i][j] = board_copy[previous_i][previous_j];
             board_copy[previous_i][previous_j] = {image: "", piece: "", color: ""};
 
-            if(state.turn === "light"){
-                player_turn = "dark";
+            if(temp.piece === "King"){
+                if(window.confirm("Check Mate! Play again?")){
+                    window.location.reload();
+                }
+            }   
+             
+            if(state.turn === "white"){
+                player_turn = "black";
             } else {
-                player_turn = "light";
+                player_turn = "white";
             }
 
             instance.setState({

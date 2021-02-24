@@ -173,10 +173,10 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
         }
 
         // we successfully made a move. now we need to switch the turns so that the opposite color can play
-        if(player_turn === "light"){
-            player_turn = "dark";
+        if(player_turn === "white"){
+            player_turn = "black";
         } else {
-            player_turn = "light";
+            player_turn = "white";
         }
 
         // update the board and reset the previous selection to be nothing
