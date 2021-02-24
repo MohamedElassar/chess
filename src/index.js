@@ -13,7 +13,11 @@ const Square = (props) => {
         <div className="square">
             <button style={{backgroundColor: props.color}} onClick={props.onClick}>
                 <div className="piece">
+                    {props.image ?
                     <img src={props.image} alt=""></img>
+                    :
+                    <div />
+                    }
                 </div>
             </button>
         </div>
