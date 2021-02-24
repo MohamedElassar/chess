@@ -91,3 +91,41 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
         break;
     }
 }
+
+export function canCapture(instance:any, state: State, i:number, j:number, clicked_piece:Piece, default_squareColor:Array<Array<string>>){
+
+    // the value (e.g. "Pawn", "", etc.) and location of the click before the one we're currently analyzing
+    let previous_value = state.selected_piece.value;
+    let previous_i = state.selected_piece.i;
+    let previous_j = state.selected_piece.j;
+
+    let player_turn:string;
+
+    let valid_moves = state.selected_piece.validCoordinates;
+
+    let board_copy = JSON.parse(JSON.stringify(state.board));
+
+    for(let index = 0 ; index < valid_moves.length ; index++){
+        let valid_x = valid_moves[index].x;
+        let valid_y = valid_moves[index].y;
+        if(i === valid_x && j === valid_y){
+            board_copy[i][j] = board_copy[previous_i][previous_j];
+            board_copy[previous_i][previous_j] = {image: "", piece: "", color: ""};
+
+            if(state.turn === "light"){
+                player_turn = "dark";
+            } else {
+                player_turn = "light";
+            }
+
+            instance.setState({
+                board: JSON.parse(JSON.stringify(board_copy)),
+                selected_piece: { i : i, j : j, value : clicked_piece.piece, validCoordinates: [] },
+                squareColor: JSON.parse(JSON.stringify(default_squareColor)), // update the board to have highlighted pieces indicating valid moves
+                turn: player_turn    
+            });
+
+        }
+    }
+
+}

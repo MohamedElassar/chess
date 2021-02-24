@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import {getColor} from './utils';
 import {pieces} from './initialBoard';
-import {startAnalysis} from './startAnalysis';
+import {startAnalysis, canCapture} from './startAnalysis';
 
 // just storing a copy of the default chess color puzzle. This is so that we can reset to this set of colors when needed
 let default_squareColor = new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  )
@@ -148,7 +148,8 @@ class App  extends React.Component{
             // handle the logic of the user clicking on a square in their correct turn
             startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
         } else {
-            // do nothing; we clicked a piece that we shouldn't control.    
+            // do nothing; we clicked a piece that we shouldn't control.
+            canCapture(this, this.state, i, j, clicked_piece, default_squareColor);    
         }
     }
 
