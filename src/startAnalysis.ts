@@ -97,7 +97,6 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
 export function canCapture(instance:any, state: State, i:number, j:number, clicked_piece:Piece, default_squareColor:Array<Array<string>>){
 
     // the value (e.g. "Pawn", "", etc.) and location of the click before the one we're currently analyzing
-    let previous_value = state.selected_piece.value;
     let previous_i = state.selected_piece.i;
     let previous_j = state.selected_piece.j;
 

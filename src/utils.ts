@@ -66,7 +66,7 @@ function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Arra
         move_y = j + moves[temp].y;
         if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // check to ensure that we don't get a "index out of bound" error 
             
-            if(board_copy[move_x][move_y].piece == "" || board_copy[move_x][move_y].color != board_copy[i][j].color){ // check to only highlight the pieces that are not occupied by pieces of the same color
+            if(board_copy[move_x][move_y].piece === "" || board_copy[move_x][move_y].color !== board_copy[i][j].color){ // check to only highlight the pieces that are not occupied by pieces of the same color
                 
                 temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
                 // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
@@ -154,16 +154,21 @@ function highlightPawn(board_copy: Array<Array<Piece>> , temp_squareColor: Array
 
             move_x = i + moves[index].x; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
             move_y = j + moves[index].y;
-            if(board_copy[move_x][move_y].piece !== "" && board_copy[move_x][move_y].color !== board_copy[i][j].color){
 
-                temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
-                // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
-                // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
-                valid_moves.push(
-                    {
-                    x: move_x, 
-                    y: move_y 
-                    });
+            if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){    
+
+                if(board_copy[move_x][move_y].piece !== "" && board_copy[move_x][move_y].color !== board_copy[i][j].color){
+
+                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
+                    // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
+                    // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
+                    valid_moves.push(
+                        {
+                        x: move_x, 
+                        y: move_y 
+                        });
+
+                }
 
             }
         }
@@ -194,7 +199,7 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Arr
             
             if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // check to ensure that we don't get a "index out of bound" error
                 
-                if(board_copy[move_x][move_y].piece == ""){  // highlighting an empty square in the piece's proposed path
+                if(board_copy[move_x][move_y].piece === ""){  // highlighting an empty square in the piece's proposed path
                     temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
                     valid_moves.push(
                         {
@@ -202,7 +207,7 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Arr
                         y: move_y 
                         });
                     
-                } else if (board_copy[move_x][move_y].color != board_copy[i][j].color) { // highlighting a non-empty square that must be of the opposite color. This shows that we can capture this piece
+                } else if (board_copy[move_x][move_y].color !== board_copy[i][j].color) { // highlighting a non-empty square that must be of the opposite color. This shows that we can capture this piece
                 
                     temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
                     valid_moves.push(
