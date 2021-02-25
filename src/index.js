@@ -130,6 +130,14 @@ let TurnTracker = (props) => {
     );
 }
 
+let Undo = (props) => {
+    return(
+        <button onClick={props.handleUndo}>
+            Undo
+        </button>
+    );
+}
+
 class App  extends React.Component{
     constructor(props){
         super(props);
@@ -137,9 +145,12 @@ class App  extends React.Component{
             board: JSON.parse(JSON.stringify(pieces)), //board is an array of the "pieces" object. See ./initialBoard for object properties. Using JSON parse and stringify to deep clone the array "pieces"
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] },
             squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
-            turn: "white"
+            turn: "white",
+            history: [JSON.parse(JSON.stringify(pieces))]
         }
         this.handleClick = this.handleClick.bind(this);
+        this.handleUndoClick = this.handleUndoClick.bind(this);
+
     }
 
     handleClick(i, j){
@@ -155,14 +166,29 @@ class App  extends React.Component{
             // do nothing; we clicked a piece that we shouldn't control.
             canCapture(this, this.state, i, j, clicked_piece, default_squareColor);    
         }
+        
+    }
+    
+    handleUndoClick(){
+        // ugly - return state back to what it was
+        this.setState( (prevState) => ({
+            board: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1).pop() : prevState.history[0],
+            history: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1) : prevState.history.slice(),
+            turn: prevState.history.length === 1 ? "white" :  prevState.turn === "black" ? "white" : "black",
+            squareColor: default_squareColor,
+            selected_piece: { i : "", j : "", value : "", validCoordinates: [] }
+        }));
     }
 
+
     render(){
+        console.log(this.state.turn);
         return(
             <div>
                 <div id="board-wrapper">
                     <TurnTracker value={this.state.turn} />
                     <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
+                    <Undo handleUndo={() => this.handleUndoClick()}/>
                 </div>
             </div>
         );

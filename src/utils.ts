@@ -1,5 +1,5 @@
 import {Piece, Move} from './initialBoard'; // importing the interfaces from the initalBoard file which defines each piece object
-
+import {State} from './startAnalysis';
 // function called once to initalize the chess board to the brown colors, and called to set the global variable "default_squareColor"
 export function getColor(i : number, j : number) : string  {
     if(i%2 === 0){
@@ -251,12 +251,13 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
             player_turn = "white";
         }
 
-        // update the board and reset the previous selection to be nothing
-        instance.setState( () => ({
+        // update the board and reset the previous selection to be nothing + update history array for undoing
+        instance.setState( (prevState:State) => ({
             board: JSON.parse(JSON.stringify(board_copy)),
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // resetting the selection to nothing and the validcoordinates to nothing
             squareColor: JSON.parse(JSON.stringify(default_squareColor)),
-            turn: player_turn // update the color of the turn
+            turn: player_turn, // update the color of the turn
+            history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))] // storing history for undo button
         }));
     }
 

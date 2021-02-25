@@ -8,12 +8,13 @@ export interface SelectedPiece {
     validCoordinates: Move[];
 }
 
-interface State {
+export interface State {
     board: Array<Array<Piece>>;
     selected_piece: SelectedPiece;
     squareColor: Array<Array<string>>;
     instance: this;
     turn: string;
+    history: Array<Array<Piece>>[];
 }
 
 /*
