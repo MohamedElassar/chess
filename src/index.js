@@ -172,9 +172,9 @@ class App  extends React.Component{
     handleUndoClick(){
         // ugly - return state back to what it was
         this.setState( (prevState) => ({
-            board: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1).pop() : prevState.history[0],
-            history: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1) : prevState.history.slice(),
-            turn: prevState.history.length === 1 ? "white" :  prevState.turn === "black" ? "white" : "black",
+            board: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1).pop() : prevState.history[0], // not the smartest way
+            history: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1) : prevState.history.slice(), // not the smartest way
+            turn: prevState.history.length === 1 ? "white" :  prevState.turn === "black" ? "white" : "black", // not the smartest way
             squareColor: default_squareColor,
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] }
         }));
@@ -182,7 +182,7 @@ class App  extends React.Component{
 
 
     render(){
-        console.log(this.state.turn);
+        console.log(this.state.history);
         return(
             <div>
                 <div id="board-wrapper">

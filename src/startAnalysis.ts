@@ -127,12 +127,21 @@ export function canCapture(instance:any, state: State, i:number, j:number, click
                 player_turn = "white";
             }
 
-            instance.setState({
+            // instance.setState({
+            //     board: JSON.parse(JSON.stringify(board_copy)),
+            //     selected_piece: { i : i, j : j, value : clicked_piece.piece, validCoordinates: [] },
+            //     squareColor: JSON.parse(JSON.stringify(default_squareColor)), // update the board to have highlighted pieces indicating valid moves
+            //     turn: player_turn    
+            // });
+
+            // update the board and reset the previous selection to be nothing + update history array for undoing
+            instance.setState( (prevState:State) => ({
                 board: JSON.parse(JSON.stringify(board_copy)),
-                selected_piece: { i : i, j : j, value : clicked_piece.piece, validCoordinates: [] },
-                squareColor: JSON.parse(JSON.stringify(default_squareColor)), // update the board to have highlighted pieces indicating valid moves
-                turn: player_turn    
-            });
+                selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // resetting the selection to nothing and the validcoordinates to nothing
+                squareColor: JSON.parse(JSON.stringify(default_squareColor)),
+                turn: player_turn, // update the color of the turn
+                history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))] // storing history for undo button
+            }));
 
         }
     }
