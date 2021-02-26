@@ -1,2 +1,0 @@
-*{margin:0;padding:0}body{background-color:grey}#board-wrapper{position:relative;text-align:center;margin-top:10rem}.board{display:inline-block}.row{display:flex}.square{position:relative;text-align:center}button{width:70px;height:70px}.piece:hover,button:hover{cursor:pointer}.piece{position:absolute;top:5px;left:5px}@media screen and (max-width:430px){button{width:40px;height:40px}img{width:30px;height:30px}}
-/*# sourceMappingURL=main.7e395563.chunk.css.map */
