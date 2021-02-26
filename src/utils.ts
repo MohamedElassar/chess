@@ -19,7 +19,7 @@ export function getColor(i : number, j : number) : string  {
 
 /****************************************************************************************************/
 
-export function findTheHighlightedSquares(board_copy:Array<Array<Piece>>, clicked_piece : Piece, temp_squareColor: Array<Array<string>>, i:number, j:number) : Array<Move> {
+export function findTheHighlightedSquares(state:State, board_copy:Array<Array<Piece>>, clicked_piece : Piece, temp_squareColor: Array<Array<string>>, i:number, j:number) : Array<Move> {
     
     let moves; // variable used to store the set of valid moves for the piece we clicked. These moves are stored in the Piece object (see initlaBoard)
     
@@ -29,7 +29,7 @@ export function findTheHighlightedSquares(board_copy:Array<Array<Piece>>, clicke
     if(clicked_piece.piece === "Pawn"){
 
     
-        validCoordinates = highlightPawn(board_copy, temp_squareColor, i, j, clicked_piece); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
+        validCoordinates = highlightPawn(board_copy, state.history, temp_squareColor, i, j, clicked_piece); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
         // an array of valid squares that we're allowed to move to is returned. this will be returned to startAnalysis to update the state's selection_piece.validCoordinates
 
         return JSON.parse(JSON.stringify(validCoordinates));
@@ -95,7 +95,7 @@ function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Arra
 /****************************************************************************************************/
 // function to find the spots to highlight on the puzzle for pieces with a fixed pattern of movement i.e. no diagonals / no moves that extend to either end of the puzzle
 // applies to Pawn, Knight, King BUT Knights are the only puzzle piece that can skip over other pieces
-function highlightPawn(board_copy: Array<Array<Piece>> , temp_squareColor: Array<Array<string>>, i:number, j:number, clicked_piece:Piece) : Array<Move> {    
+function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<Array<Piece>>> , temp_squareColor: Array<Array<string>>, i:number, j:number, clicked_piece:Piece) : Array<Move> {    
 
     let move_x:number;
     let move_y:number;
@@ -105,9 +105,7 @@ function highlightPawn(board_copy: Array<Array<Piece>> , temp_squareColor: Array
     let moved_before:boolean = clicked_piece.moved_before as boolean;
 
     if(moved_before === false){
-        
         moves = clicked_piece.move_Pawn_firstTime as Array<Move>;
-
         for(let index = 0; index < moves.length; index++){
 
             move_x = i + moves[index].x; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
@@ -131,6 +129,7 @@ function highlightPawn(board_copy: Array<Array<Piece>> , temp_squareColor: Array
 
     } else {
 
+        // handling the ability to move up one square if free
         moves = clicked_piece.move as Array<Move>;
 
         move_x = i + moves[0].x; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
@@ -146,10 +145,9 @@ function highlightPawn(board_copy: Array<Array<Piece>> , temp_squareColor: Array
                     x: move_x, 
                     y: move_y 
                     });
-
         }
 
-
+        // checking if we can highlight the corner squares if there's potential for capturing
         for(let index = 1; index < moves.length; index++){
 
             move_x = i + moves[index].x; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
@@ -172,6 +170,78 @@ function highlightPawn(board_copy: Array<Array<Piece>> , temp_squareColor: Array
 
             }
         }
+
+        // handling the En Passant rule for pawns - TBD stupid method
+
+        let pawn_color = clicked_piece.color;
+
+        if(pawn_color === "white"){
+            if(j-1 >= 0){
+                if(board_copy[i][j-1].piece === "Pawn" && board_copy[i][j-1].color !== board_copy[i][j].color){
+                    let previous_board = history[history.length - 2];
+                    let previous_opponent_location = previous_board[i][j-1];
+                    if(previous_opponent_location.piece === "" && previous_board[i-2][j-1].piece === "Pawn" && previous_board[i-2][j-1].moved_before === false){
+                        temp_squareColor[i-1][j-1] = "pink";                    
+                        valid_moves.push(
+                            {
+                            x: i-1, 
+                            y: j-1 
+                            });
+    
+                    }
+                }
+            } 
+            
+            if(j+1 < board_copy.length){
+                if(board_copy[i][j+1].piece === "Pawn" && board_copy[i][j+1].color !== board_copy[i][j].color){
+                    let previous_board = history[history.length - 2];
+                    let previous_opponent_location = previous_board[i][j+1];
+                    if(previous_opponent_location.piece === "" && previous_board[i-2][j+1].piece === "Pawn" && previous_board[i-2][j+1].moved_before === false){
+                        temp_squareColor[i-1][j+1] = "pink";                    
+                        valid_moves.push(
+                            {
+                            x: i-1, 
+                            y: j+1 
+                            });
+    
+                    }
+                }
+            }
+        } else if(pawn_color === "black"){
+            if(j-1 >= 0){
+                if(board_copy[i][j-1].piece === "Pawn" && board_copy[i][j-1].color !== board_copy[i][j].color){
+                    let previous_board = history[history.length - 2];
+                    let previous_opponent_location = previous_board[i][j-1];
+                    if(previous_opponent_location.piece === "" && previous_board[i+2][j-1].piece === "Pawn" && previous_board[i+2][j-1].moved_before === false){
+                        temp_squareColor[i+1][j-1] = "pink";                    
+                        valid_moves.push(
+                            {
+                            x: i+1, 
+                            y: j-1 
+                            });
+
+                    }
+                }
+            } 
+            
+            if(j+1 < board_copy.length){
+                if(board_copy[i][j+1].piece === "Pawn" && board_copy[i][j+1].color !== board_copy[i][j].color){
+                    let previous_board = history[history.length - 2];
+                    let previous_opponent_location = previous_board[i][j+1];
+                    if(previous_opponent_location.piece === "" && previous_board[i+2][j-1].piece === "Pawn" && previous_board[i+2][j+1].moved_before === false){
+                        temp_squareColor[i+1][j+1] = "pink";                    
+                        valid_moves.push(
+                            {
+                            x: i+1, 
+                            y: j+1 
+                            });
+
+                    }
+                }
+            }
+        }
+
+
 
 
     }
@@ -235,6 +305,9 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
     let isValid:boolean = isValidMove(i, j, validLocationsToMoveTo);
     
     if(isValid){
+        
+        checkForEnPassant(board_copy, i, j, previous_i, previous_j, validLocationsToMoveTo);
+
         // swapping the elements in the board (the current one we clicked with the previous one we clicked)
         swap(board_copy, i, j, previous_i, previous_j);
         console.log("moved!");
@@ -282,4 +355,25 @@ function swap(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: 
     let temp = board_copy[i][j];
     board_copy[i][j] = board_copy[previous_i][previous_j];
     board_copy[previous_i][previous_j] = temp;
+}
+
+/****************************************************************************************************/
+function checkForEnPassant(board_copy:Array<Array<Piece>>, i:number, j:number, previous_i:number, previous_j:number, validLocationsToMoveTo:Array<Move>){
+
+    if(board_copy[previous_i][previous_j].piece === "Pawn" && board_copy[i][j].piece === ""){
+
+        if(board_copy[previous_i][previous_j].color === "white"){
+            if(j !== previous_j){
+                board_copy[i+1][j] = {image: "", piece: "", color: "", move : []};
+            }
+
+        } else {
+            if(j !== previous_j){
+                board_copy[i-1][j] = {image: "", piece: "", color: "", move : []};
+            }
+        }
+        
+    } else {
+
+    }
 }

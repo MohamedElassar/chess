@@ -51,15 +51,14 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
         case true: // if the previously selected piece was just an empty square:
             switch (clicked_piece.piece === "") {
                 case true: // previous was blank + current selection is blank
-                    instance.setState( (prevState:State) => ({
-                        selected_piece: { i : i, j : j, value : clicked_piece.piece, validCoordinates: [] },
-                        squareColor: default_squareColor
-                        }));
+                    
+                    // do nothing
+
                 break;
                 case false: // previous was blank + current selection is a chess piece 
 
                     // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
-                    validLocationsToMoveTo = findTheHighlightedSquares(board_copy, clicked_piece, temp_squareColor, i, j);
+                    validLocationsToMoveTo = findTheHighlightedSquares(state, board_copy, clicked_piece, temp_squareColor, i, j);
 
                     instance.setState({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece, validCoordinates: JSON.parse(JSON.stringify(validLocationsToMoveTo)) },
@@ -81,7 +80,7 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                 case false: // previous was a piece + current selection is a another piece
 
                     // function to change the array temp_squareColor so that it holds all the locations of the squares to be highlighted pink
-                    validLocationsToMoveTo = findTheHighlightedSquares(board_copy, clicked_piece, temp_squareColor, i, j);
+                    validLocationsToMoveTo = findTheHighlightedSquares(state, board_copy, clicked_piece, temp_squareColor, i, j);
 
                     instance.setState({
                         selected_piece: { i : i, j : j, value : clicked_piece.piece, validCoordinates: JSON.parse(JSON.stringify(validLocationsToMoveTo)) },
@@ -118,7 +117,7 @@ export function canCapture(instance:any, state: State, i:number, j:number, click
 
             let temp = board_copy[i][j];
             board_copy[i][j] = board_copy[previous_i][previous_j];
-            board_copy[previous_i][previous_j] = {image: "", piece: "", color: ""}; // swap locations and turn the opposing piece to just an empty square
+            board_copy[previous_i][previous_j] = {image: "", piece: "", color: "", move:[]}; // swap locations and turn the opposing piece to just an empty square
 
             // TBD
             if(temp.piece === "King"){

@@ -60,10 +60,6 @@ button:hover, .piece:hover {
     color: white;
 }
 
-#Turn-tracker {
-
-}
-
 @media screen and (max-width: 430px){
     button {
         width: 40px;
