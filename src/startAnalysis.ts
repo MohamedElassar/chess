@@ -1,5 +1,6 @@
 import {Piece, Move} from './initialBoard'; // importing the interfaces from the initalBoard file which defines each piece object
-import {findTheHighlightedSquares, makeMove} from './utils'; // function to color the right squares when we select a chess piece
+import {findTheHighlightedSquares} from './highlighting'; // function to color the right squares when we select a chess piece
+import {makeMove} from './move';
 
 export interface SelectedPiece {
     i: number | string;

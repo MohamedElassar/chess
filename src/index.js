@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {getColor} from './utils';
+import {getColor} from './highlighting';
 import {pieces} from './initialBoard';
 import {startAnalysis, canCapture} from './startAnalysis';
 
@@ -178,8 +178,10 @@ class App  extends React.Component{
 
         let clicked_piece_color = clicked_piece.color;
 
-        if(clicked_piece_color === this.state.turn || clicked_piece_color === "" ){ // only allow player to move the pieces in the correct turn. if the current turn is white and they click a black piece, no analysis takes place
+        if(clicked_piece_color === this.state.turn || clicked_piece_color === "" ){ 
+            // only allow player to move the pieces in the correct turn. if the current turn is white and they click a black piece, no analysis takes place
             // handle the logic of the user clicking on a square in their correct turn e.g. white's turn and they click on a white/blank square
+            // also handle En Passant for Pawns
             startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
         } else if (clicked_piece.color !== this.state.turn) {
             // user may be trying to capture e.g. white's turn clicking on a black piece
