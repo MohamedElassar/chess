@@ -211,7 +211,7 @@ let dark_Pawn:Piece = {
             y: 0
         }
     ],
-    move: [
+    move: [ // tbd: the first element in move is the ability of the pawn to move forward one step. The other 2 are the ability to capture
         {
             x: 1,
             y: 0
@@ -410,7 +410,7 @@ let light_Pawn:Piece = {
             y: 0
         }
     ],
-    move: [
+    move: [ // tbd: the first element in move is the ability of the pawn to move forward one step. The other 2 are the ability to capture
         {
             x: -1,
             y: 0

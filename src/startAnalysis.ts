@@ -94,15 +94,19 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
 }
 
 /**************************************************************************************************************************************************************/
-
+// function to handle the user clicking on a piece of the opposing color
 export function canCapture(instance:any, state: State, i:number, j:number, clicked_piece:Piece, default_squareColor:Array<Array<string>>){
 
     // the value (e.g. "Pawn", "", etc.) and location of the click before the one we're currently analyzing
     let previous_i = state.selected_piece.i;
     let previous_j = state.selected_piece.j;
 
+    // flag to track if the clicked piece is ok to capture
+    let flag = false;
+
     let player_turn:string;
 
+    // our previous selection's valid set of moves. e.g. if we previously selected a white pawn and we click on a black knight, this will store the locations of all the valid moves for the white pawn
     let valid_moves = state.selected_piece.validCoordinates;
 
     let board_copy = JSON.parse(JSON.stringify(state.board));
@@ -110,40 +114,42 @@ export function canCapture(instance:any, state: State, i:number, j:number, click
     for(let index = 0 ; index < valid_moves.length ; index++){
         let valid_x = valid_moves[index].x;
         let valid_y = valid_moves[index].y;
-        if(i === valid_x && j === valid_y){
+        if(i === valid_x && j === valid_y){ // is the location we clicked one of the valid locations previously identified and stored for our piece?
+
             let temp = board_copy[i][j];
             board_copy[i][j] = board_copy[previous_i][previous_j];
-            board_copy[previous_i][previous_j] = {image: "", piece: "", color: ""};
+            board_copy[previous_i][previous_j] = {image: "", piece: "", color: ""}; // swap locations and turn the opposing piece to just an empty square
 
+            // TBD
             if(temp.piece === "King"){
                 if(window.confirm("Check Mate! Play again?")){
                     window.location.reload();
                 }
             }   
              
+            // switch turns. used in setting the state
             if(state.turn === "white"){
                 player_turn = "black";
             } else {
                 player_turn = "white";
             }
 
-            // instance.setState({
-            //     board: JSON.parse(JSON.stringify(board_copy)),
-            //     selected_piece: { i : i, j : j, value : clicked_piece.piece, validCoordinates: [] },
-            //     squareColor: JSON.parse(JSON.stringify(default_squareColor)), // update the board to have highlighted pieces indicating valid moves
-            //     turn: player_turn    
-            // });
+            flag = true; // we captured one
 
-            // update the board and reset the previous selection to be nothing + update history array for undoing
-            instance.setState( (prevState:State) => ({
-                board: JSON.parse(JSON.stringify(board_copy)),
-                selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // resetting the selection to nothing and the validcoordinates to nothing
-                squareColor: JSON.parse(JSON.stringify(default_squareColor)),
-                turn: player_turn, // update the color of the turn
-                history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))] // storing history for undo button
-            }));
+            break;
 
         }
+    }
+
+    if(flag){
+        // update the board and reset the previous selection to be nothing + update history array for undoing
+        instance.setState( (prevState:State) => ({
+            board: JSON.parse(JSON.stringify(board_copy)),
+            selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // resetting the selection to nothing and the validcoordinates to nothing
+            squareColor: JSON.parse(JSON.stringify(default_squareColor)),
+            turn: player_turn, // update the color of the turn
+            history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))] // storing history for undo button
+        }));
     }
 
 }

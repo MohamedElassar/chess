@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -41,6 +42,28 @@ button:hover, .piece:hover {
     left: 5px;
 }
 
+.row-label {
+    width: auto;
+    height: 70px;
+    margin-right: 10px;
+    padding-top: 25px;
+    background-color: grey;
+    color: white;    
+}
+
+.col-label {
+    width: 560px;
+    margin-left: 20px;
+    display: flex;
+    justify-content: space-around;
+    background-color: grey;
+    color: white;
+}
+
+#Turn-tracker {
+
+}
+
 @media screen and (max-width: 430px){
     button {
         width: 40px;
@@ -50,6 +73,18 @@ button:hover, .piece:hover {
     img {
         width: 30px;
         height: 30px;
+    }
+
+    .row-label {
+        height: 40px;
+        margin-right: 10px;
+        padding-top: 10px;
+   
+    }
+    
+    .col-label {
+        width: 320px;
+        margin-left: 20px;
     }
 
 }

@@ -37,7 +37,20 @@ class ChessBoard extends React.Component {
     render(){
         return( 
             <div className="board">
+
+                <div className="col-label">
+                    <div>a</div>
+                    <div>b</div>
+                    <div>c</div>
+                    <div>d</div>
+                    <div>e</div>
+                    <div>f</div>
+                    <div>g</div>
+                    <div>h</div>
+                </div>
+
                 <div className="row" id="row-0">
+                    <div className="row-label">8</div>
                     {this.renderSquare(0, 0)} 
                     {this.renderSquare(0, 1)}
                     {this.renderSquare(0, 2)}
@@ -48,6 +61,7 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(0, 7)}
                 </div>
                 <div className="row" id="row-1">
+                    <div className="row-label">7</div>
                     {this.renderSquare(1, 0)}
                     {this.renderSquare(1, 1)}
                     {this.renderSquare(1, 2)}
@@ -58,6 +72,7 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(1, 7)}
                 </div>
                 <div className="row" id="row-2">
+                    <div className="row-label">6</div>
                     {this.renderSquare(2, 0)}
                     {this.renderSquare(2, 1)}
                     {this.renderSquare(2, 2)}
@@ -68,6 +83,7 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(2, 7)}
                 </div>
                 <div className="row" id="row-3">
+                    <div className="row-label">5</div>
                     {this.renderSquare(3, 0)}
                     {this.renderSquare(3, 1)}
                     {this.renderSquare(3, 2)}
@@ -78,6 +94,7 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(3, 7)}
                 </div>
                 <div className="row" id="row-4">
+                    <div className="row-label">4</div>
                     {this.renderSquare(4, 0)}
                     {this.renderSquare(4, 1)}
                     {this.renderSquare(4, 2)}
@@ -88,6 +105,7 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(4, 7)}
                 </div>
                 <div className="row" id="row-5">
+                    <div className="row-label">3</div>
                     {this.renderSquare(5, 0)}
                     {this.renderSquare(5, 1)}
                     {this.renderSquare(5, 2)}
@@ -98,6 +116,7 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(5, 7)}
                 </div>
                 <div className="row" id="row-6">
+                    <div className="row-label">2</div>
                     {this.renderSquare(6, 0)}
                     {this.renderSquare(6, 1)}
                     {this.renderSquare(6, 2)}
@@ -108,6 +127,7 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(6, 7)}
                 </div>
                 <div className="row" id="row-7">
+                    <div className="row-label">1</div>
                     {this.renderSquare(7, 0)}
                     {this.renderSquare(7, 1)}
                     {this.renderSquare(7, 2)}
@@ -124,7 +144,7 @@ class ChessBoard extends React.Component {
 
 let TurnTracker = (props) => {
     return(
-        <div style={{color: "white"}}>
+        <div style={{color: "white"}} id="Turn-tracker">
             {props.value}'s turn
         </div>
     );
@@ -143,14 +163,13 @@ class App  extends React.Component{
         super(props);
         this.state = {
             board: JSON.parse(JSON.stringify(pieces)), //board is an array of the "pieces" object. See ./initialBoard for object properties. Using JSON parse and stringify to deep clone the array "pieces"
-            selected_piece: { i : "", j : "", value : "", validCoordinates: [] },
+            selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // valid coordinates stores all the locations of the valid moves for the piece selected
             squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
             turn: "white",
-            history: [JSON.parse(JSON.stringify(pieces))]
+            history: [JSON.parse(JSON.stringify(pieces))] // array to store all the history of moves. Used for the undo button
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleUndoClick = this.handleUndoClick.bind(this);
-
     }
 
     handleClick(i, j){
@@ -159,11 +178,11 @@ class App  extends React.Component{
 
         let clicked_piece_color = clicked_piece.color;
 
-        if(clicked_piece_color === this.state.turn || clicked_piece_color === "" ){ // only allow plater to move the pieces in the correct turn. if the current turn is white and they click a black piece, no analysis takes place
-            // handle the logic of the user clicking on a square in their correct turn
+        if(clicked_piece_color === this.state.turn || clicked_piece_color === "" ){ // only allow player to move the pieces in the correct turn. if the current turn is white and they click a black piece, no analysis takes place
+            // handle the logic of the user clicking on a square in their correct turn e.g. white's turn and they click on a white/blank square
             startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
-        } else {
-            // do nothing; we clicked a piece that we shouldn't control.
+        } else if (clicked_piece.color !== this.state.turn) {
+            // user may be trying to capture e.g. white's turn clicking on a black piece
             canCapture(this, this.state, i, j, clicked_piece, default_squareColor);    
         }
         
@@ -186,9 +205,9 @@ class App  extends React.Component{
         return(
             <div>
                 <div id="board-wrapper">
-                    <TurnTracker value={this.state.turn} />
+                    <TurnTracker value={this.state.turn} /> 
                     <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
-                    <Undo handleUndo={() => this.handleUndoClick()}/>
+                    <Undo handleUndo={() => this.handleUndoClick()}/>      
                 </div>
             </div>
         );
