@@ -231,7 +231,7 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
                 if(board_copy[i][j+1].piece === "Pawn" && board_copy[i][j+1].color !== board_copy[i][j].color){
                     let previous_board = history[history.length - 2];
                     let previous_opponent_location = previous_board[i][j+1];
-                    if(previous_opponent_location.piece === "" && previous_board[i+2][j-1].piece === "Pawn" && previous_board[i+2][j+1].moved_before === false){
+                    if(previous_opponent_location.piece === "" && previous_board[i+2][j+1].piece === "Pawn" && previous_board[i+2][j+1].moved_before === false){
                         temp_squareColor[i+1][j+1] = "pink";                    
                         valid_moves.push(
                             {
