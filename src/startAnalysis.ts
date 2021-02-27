@@ -122,6 +122,11 @@ export function canCapture(instance:any, state: State, i:number, j:number, click
             board_copy[i][j] = board_copy[previous_i][previous_j];
             board_copy[previous_i][previous_j] = {image: "", piece: "", color: "", move:[]}; // swap locations and turn the opposing piece to just an empty square
 
+        // specific to pawns: after moving them for the first time, we have to set their moved_before attribute to true. This will enable us to use their second set of valid moves next time we want to move the same pawn
+        if(board_copy[i][j].piece === "Pawn" && board_copy[i][j].moved_before === false){
+            board_copy[i][j].moved_before = true;
+        }
+
             // TBD
             if(temp.piece === "King"){
                 if(window.confirm("Check Mate! Play again?")){
