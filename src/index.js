@@ -38,7 +38,7 @@ class ChessBoard extends React.Component {
         return( 
             <div className="board">
 
-                <div className="col-label">
+                <div className="col-label-top">
                     <div>a</div>
                     <div>b</div>
                     <div>c</div>
@@ -50,7 +50,7 @@ class ChessBoard extends React.Component {
                 </div>
 
                 <div className="row" id="row-0">
-                    <div className="row-label">8</div>
+                    <div className="row-label-left">8</div>
                     {this.renderSquare(0, 0)} 
                     {this.renderSquare(0, 1)}
                     {this.renderSquare(0, 2)}
@@ -59,9 +59,10 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(0, 5)}
                     {this.renderSquare(0, 6)}
                     {this.renderSquare(0, 7)}
+                    <div className="row-label-right">8</div>
                 </div>
                 <div className="row" id="row-1">
-                    <div className="row-label">7</div>
+                    <div className="row-label-left">7</div>
                     {this.renderSquare(1, 0)}
                     {this.renderSquare(1, 1)}
                     {this.renderSquare(1, 2)}
@@ -70,9 +71,10 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(1, 5)}
                     {this.renderSquare(1, 6)}
                     {this.renderSquare(1, 7)}
+                    <div className="row-label-right">7</div>
                 </div>
                 <div className="row" id="row-2">
-                    <div className="row-label">6</div>
+                    <div className="row-label-left">6</div>
                     {this.renderSquare(2, 0)}
                     {this.renderSquare(2, 1)}
                     {this.renderSquare(2, 2)}
@@ -81,9 +83,10 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(2, 5)}
                     {this.renderSquare(2, 6)}
                     {this.renderSquare(2, 7)}
+                    <div className="row-label-right">6</div>
                 </div>
                 <div className="row" id="row-3">
-                    <div className="row-label">5</div>
+                    <div className="row-label-left">5</div>
                     {this.renderSquare(3, 0)}
                     {this.renderSquare(3, 1)}
                     {this.renderSquare(3, 2)}
@@ -92,9 +95,10 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(3, 5)}
                     {this.renderSquare(3, 6)}
                     {this.renderSquare(3, 7)}
+                    <div className="row-label-right">5</div>
                 </div>
                 <div className="row" id="row-4">
-                    <div className="row-label">4</div>
+                    <div className="row-label-left">4</div>
                     {this.renderSquare(4, 0)}
                     {this.renderSquare(4, 1)}
                     {this.renderSquare(4, 2)}
@@ -103,9 +107,10 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(4, 5)}
                     {this.renderSquare(4, 6)}
                     {this.renderSquare(4, 7)}
+                    <div className="row-label-right">4</div>
                 </div>
                 <div className="row" id="row-5">
-                    <div className="row-label">3</div>
+                    <div className="row-label-left">3</div>
                     {this.renderSquare(5, 0)}
                     {this.renderSquare(5, 1)}
                     {this.renderSquare(5, 2)}
@@ -114,9 +119,10 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(5, 5)}
                     {this.renderSquare(5, 6)}
                     {this.renderSquare(5, 7)}
+                    <div className="row-label-right">3</div>
                 </div>
                 <div className="row" id="row-6">
-                    <div className="row-label">2</div>
+                    <div className="row-label-left">2</div>
                     {this.renderSquare(6, 0)}
                     {this.renderSquare(6, 1)}
                     {this.renderSquare(6, 2)}
@@ -125,9 +131,10 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(6, 5)}
                     {this.renderSquare(6, 6)}
                     {this.renderSquare(6, 7)}
+                    <div className="row-label-right">2</div>
                 </div>
                 <div className="row" id="row-7">
-                    <div className="row-label">1</div>
+                    <div className="row-label-left">1</div>
                     {this.renderSquare(7, 0)}
                     {this.renderSquare(7, 1)}
                     {this.renderSquare(7, 2)}
@@ -136,7 +143,20 @@ class ChessBoard extends React.Component {
                     {this.renderSquare(7, 5)}
                     {this.renderSquare(7, 6)}
                     {this.renderSquare(7, 7)}
+                    <div className="row-label-right">1</div>
                 </div>
+
+                <div className="col-label-bottom">
+                    <div>a</div>
+                    <div>b</div>
+                    <div>c</div>
+                    <div>d</div>
+                    <div>e</div>
+                    <div>f</div>
+                    <div>g</div>
+                    <div>h</div>
+                </div>
+
             </div>
         );
     }
@@ -152,9 +172,11 @@ let TurnTracker = (props) => {
 
 let Undo = (props) => {
     return(
-        <button onClick={props.handleUndo}>
-            Undo
-        </button>
+        <div>
+            <button onClick={props.handleUndo}>
+                Undo
+            </button>
+        </div>
     );
 }
 
