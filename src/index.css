@@ -163,6 +163,6 @@ button:hover, .piece:hover {
     transform: translateY(-5px);
 }
 
-#undo {
+#undo button {
     -webkit-appearance: none;
 }
