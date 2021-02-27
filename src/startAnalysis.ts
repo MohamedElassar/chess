@@ -112,8 +112,10 @@ export function canCapture(instance:any, state: State, i:number, j:number, click
     let board_copy = JSON.parse(JSON.stringify(state.board));
 
     for(let index = 0 ; index < valid_moves.length ; index++){
+
         let valid_x = valid_moves[index].x;
         let valid_y = valid_moves[index].y;
+        
         if(i === valid_x && j === valid_y){ // is the location we clicked one of the valid locations previously identified and stored for our piece?
 
             let temp = board_copy[i][j];

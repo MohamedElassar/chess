@@ -30,7 +30,6 @@ export function findTheHighlightedSquares(state:State, board_copy:Array<Array<Pi
     // We have to consider Pawns separately because their valid moves change depending on if it's the first time the pawn is moved
     if(clicked_piece.piece === "Pawn"){
 
-    
         validCoordinates = highlightPawn(board_copy, state.history, temp_squareColor, i, j, clicked_piece); // function to alter the temp_squareColor array that will be used in setState => passed and changed by reference
         // an array of valid squares that we're allowed to move to is returned. this will be returned to startAnalysis to update the state's selection_piece.validCoordinates
 
@@ -107,11 +106,15 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
     let moved_before:boolean = clicked_piece.moved_before as boolean;
 
     if(moved_before === false){
+
         moves = clicked_piece.move_Pawn_firstTime as Array<Move>;
-        for(let index = 0; index < moves.length; index++){
+
+        // this loop handles the highlighting of the 2 squares the pawn can move up initially. notice index < 2
+        for(let index = 0; index < 2; index++){
 
             move_x = i + moves[index].x; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
             move_y = j + moves[index].y;
+
             if(board_copy[move_x][move_y].piece === ""){
 
                 temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
@@ -125,6 +128,30 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
 
             } else {
                 break;
+            }
+
+        }
+
+        // this loop starts at 2 because the elements in the move_pawn_first_time array have this arrangement:
+        // [0] and [1] are for the 2 vertical squares that the pawn can move up if free, [2] and [3] are the diagonal captures a pawn can make even on its first move
+        for(let index = 2; index < moves.length; index++){
+
+            move_x = i + moves[index].x; // moves is an array of "Moves"; see initialBoard for interface. it's an object with x and y representing the alteration to be made to the array location
+            move_y = j + moves[index].y;
+
+            if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){
+                if(board_copy[move_x][move_y].piece !== "" && board_copy[move_x][move_y].color !== board_copy[i][j].color){
+
+                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
+                    // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
+                    // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
+                    valid_moves.push(
+                        {
+                        x: move_x, 
+                        y: move_y 
+                        });
+    
+                } 
             }
 
         }

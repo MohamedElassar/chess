@@ -209,6 +209,15 @@ let dark_Pawn:Piece = {
         {
             x: 2,
             y: 0
+        },
+        // the next 2 elements are here because a pawn can also capture diagonally on its firs move 
+        {
+            x: 1,
+            y: 1
+        },
+        {
+            x: 1,
+            y: -1
         }
     ],
     move: [ // tbd: the first element in move is the ability of the pawn to move forward one step. The other 2 are the ability to capture
@@ -408,6 +417,15 @@ let light_Pawn:Piece = {
         {
             x: -2,
             y: 0
+        },
+        // the next 2 elements are here because a pawn can also capture diagonally on its firs move 
+        {
+            x: -1,
+            y: -1
+        },
+        {
+            x: -1,
+            y: 1
         }
     ],
     move: [ // tbd: the first element in move is the ability of the pawn to move forward one step. The other 2 are the ability to capture
@@ -433,7 +451,7 @@ let blank:Piece = {
     move:[]
 }
 
-
+// used to initialize the board in the App component index.js
 export let pieces = [
     [Object.assign({}, dark_Rook), Object.assign({}, dark_Knight), Object.assign({}, dark_Bishop), dark_Queen, dark_King, Object.assign({}, dark_Bishop), Object.assign({}, dark_Knight), Object.assign({}, dark_Rook)],
     new Array(8).fill(Object.assign({}, dark_Pawn)),
@@ -444,3 +462,19 @@ export let pieces = [
     new Array(8).fill(Object.assign({}, light_Pawn)),
     [Object.assign({}, light_Rook), Object.assign({}, light_Knight), Object.assign({}, light_Bishop), light_Queen, light_King, Object.assign({}, light_Bishop), Object.assign({}, light_Knight), Object.assign({}, light_Rook)],
 ];
+
+// options for the user to promote the pawn when able to. used in move.ts in promotePawn()
+export let pawnPromotions = {
+    "white": {
+        "bishop": light_Bishop,
+        "queen": light_Queen,
+        "rook": light_Rook,
+        "knight": light_Knight
+    },
+    "black": {
+        "bishop": dark_Bishop,
+        "queen": dark_Queen,
+        "rook": dark_Rook,
+        "knight": dark_Knight
+    }
+};
