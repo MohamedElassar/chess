@@ -18,6 +18,10 @@ body {
     display: inline-block;
 }
 
+#Turn-tracker {
+    padding: 2%;
+}
+
 .row {
     display: flex;
 }
@@ -103,12 +107,12 @@ button:hover, .piece:hover {
 
     .col-label-top {
         width: 320px;
-        margin-left: 20px;
+        margin-left: 14px;
     }
 
     .col-label-bottom {
         width: 320px;
-        margin-left: 20px;
+        margin-left: 14px;
     }
 
 }
@@ -127,23 +131,23 @@ button:hover, .piece:hover {
     .row-label-left {
         height: 40px;
         margin-right: 10px;
-        padding-top: 10px;
+        padding-top: 17px;
     }
     
     .row-label-right {
         height: 40px;
         margin-left: 10px;
-        padding-top: 10px;
+        padding-top: 17px;
     }
 
     .col-label-top {
-        width: 320px;
-        margin-left: 20px;
+        width: 395px;
+        margin-left: 21px;
     }
 
     .col-label-bottom {
-        width: 320px;
-        margin-left: 20px;
+        width: 395px;
+        margin-left: 21px;
     }
 }
 
@@ -163,6 +167,12 @@ button:hover, .piece:hover {
     transform: translateY(-5px);
 }
 
+#undo {
+    padding-top: 3%;
+}
+
 #undo button {
+    background-color: white;
+    color: black;
     -webkit-appearance: none;
 }
