@@ -173,6 +173,7 @@ button:hover, .piece:hover {
 
 #undo button {
     background-color: white;
+    border-radius: 10%;
     color: black;
     -webkit-appearance: none;
 }
