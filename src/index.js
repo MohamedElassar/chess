@@ -172,7 +172,7 @@ let TurnTracker = (props) => {
 
 let Undo = (props) => {
     return(
-        <div>
+        <div id="undo">
             <button onClick={props.handleUndo}>
                 Undo
             </button>

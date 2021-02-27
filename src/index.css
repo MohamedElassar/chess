@@ -162,3 +162,7 @@ button:hover, .piece:hover {
 .github-logo:hover {
     transform: translateY(-5px);
 }
+
+#undo {
+    -webkit-appearance: none;
+}
