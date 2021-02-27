@@ -1,6 +1,6 @@
 import {Piece, Move} from './initialBoard'; // importing the interfaces from the initalBoard file which defines each piece object
 import {State} from './startAnalysis';
-import {pawnPromotions} from './initialBoard';
+import {swap, promotePawn, isValidMove} from './sharedMoveLogic';
 /****************************************************************************************************/
 // function to analyze if the location the user clicked is a valid move for the piece they previously clicked
 export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number, 
@@ -23,9 +23,7 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
         }
 
         // promoting a pawn that reached the end of the board
-        if(board_copy[i][j].piece === "Pawn" && (i === board_copy.length - 1 || i === 0) ){
-            promotePawn(board_copy, i, j, previous_i, previous_j);
-        }
+        promotePawn(board_copy, i, j, previous_i, previous_j);
 
         // we successfully made a move. now we need to switch the turns so that the opposite color can play
         if(player_turn === "white"){
@@ -47,19 +45,6 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
 } 
 
 /****************************************************************************************************/
-// function to check if the proposed move is valid. It compares the (x,y) of the clicked square to the valid set of squares for the previously selected pieces, which is stored in state.validCoordinates 
-function isValidMove(i:number, j:number, validLocationsToMoveTo: Array<Move>) : boolean {
-    for(let index = 0; index < validLocationsToMoveTo.length; index++){
-        let valid_x = validLocationsToMoveTo[index].x;
-        let valid_y = validLocationsToMoveTo[index].y;
-        if(valid_x === i && valid_y === j){
-            return true;
-        }
-    }
-    return false;
-}
-
-/****************************************************************************************************/
 function checkForEnPassant(board_copy:Array<Array<Piece>>, i:number, j:number, previous_i:number, previous_j:number, validLocationsToMoveTo:Array<Move>){
 
     // check if the piece we're trying to move is a Pawn and that we're trying to move it to an empty square
@@ -79,32 +64,3 @@ function checkForEnPassant(board_copy:Array<Array<Piece>>, i:number, j:number, p
     }
 }
 
-/****************************************************************************************************/
-// swapping the piece with the valid destination
-function swap(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number){
-    let temp = board_copy[i][j];
-    board_copy[i][j] = board_copy[previous_i][previous_j];
-    board_copy[previous_i][previous_j] = temp;
-}
-
-/****************************************************************************************************/
-function promotePawn(board_copy:Array<Array<Piece>>, i:number, j:number, previous_i:number, previous_j:number){
-
-    let options: any;
-    let user_choice:string | null;
-
-    while(true){
-        user_choice = window.prompt("What would you like the pawn to be promoted to?\nChoose from a bishop, queen, rook, or knight.")
-        user_choice = (user_choice as string).toLocaleLowerCase()
-        if(user_choice === "rook" || user_choice === "queen" || user_choice === "knight" || user_choice === "bishop"){
-            break;
-        }
-    }
-
-    if(board_copy[i][j].color === "white"){
-        options = pawnPromotions.white;
-    } else {
-        options = pawnPromotions.black;
-    }
-    board_copy[i][j] = options[(user_choice as string).toLocaleLowerCase()];
-}

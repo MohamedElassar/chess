@@ -1,7 +1,7 @@
 import {Piece, Move} from './initialBoard'; // importing the interfaces from the initalBoard file which defines each piece object
 import {findTheHighlightedSquares} from './highlighting'; // function to color the right squares when we select a chess piece
 import {makeMove} from './move';
-
+/****************************************************************************************************/
 export interface SelectedPiece {
     i: number | string;
     j: number | string;
@@ -101,62 +101,13 @@ export function canCapture(instance:any, state: State, i:number, j:number, click
     let previous_i = state.selected_piece.i;
     let previous_j = state.selected_piece.j;
 
-    // flag to track if the clicked piece is ok to capture
-    let flag = false;
-
-    let player_turn:string;
+    let player_turn = state.turn;
 
     // our previous selection's valid set of moves. e.g. if we previously selected a white pawn and we click on a black knight, this will store the locations of all the valid moves for the white pawn
     let valid_moves = state.selected_piece.validCoordinates;
 
     let board_copy = JSON.parse(JSON.stringify(state.board));
 
-    for(let index = 0 ; index < valid_moves.length ; index++){
-
-        let valid_x = valid_moves[index].x;
-        let valid_y = valid_moves[index].y;
-        
-        if(i === valid_x && j === valid_y){ // is the location we clicked one of the valid locations previously identified and stored for our piece?
-
-            let temp = board_copy[i][j];
-            board_copy[i][j] = board_copy[previous_i][previous_j];
-            board_copy[previous_i][previous_j] = {image: "", piece: "", color: "", move:[]}; // swap locations and turn the opposing piece to just an empty square
-
-        // specific to pawns: after moving them for the first time, we have to set their moved_before attribute to true. This will enable us to use their second set of valid moves next time we want to move the same pawn
-        if(board_copy[i][j].piece === "Pawn" && board_copy[i][j].moved_before === false){
-            board_copy[i][j].moved_before = true;
-        }
-
-            // TBD
-            if(temp.piece === "King"){
-                if(window.confirm("Check Mate! Play again?")){
-                    window.location.reload();
-                }
-            }   
-             
-            // switch turns. used in setting the state
-            if(state.turn === "white"){
-                player_turn = "black";
-            } else {
-                player_turn = "white";
-            }
-
-            flag = true; // we captured one
-
-            break;
-
-        }
-    }
-
-    if(flag){
-        // update the board and reset the previous selection to be nothing + update history array for undoing
-        instance.setState( (prevState:State) => ({
-            board: JSON.parse(JSON.stringify(board_copy)),
-            selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // resetting the selection to nothing and the validcoordinates to nothing
-            squareColor: JSON.parse(JSON.stringify(default_squareColor)),
-            turn: player_turn, // update the color of the turn
-            history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))] // storing history for undo button
-        }));
-    }
+    makeMove(board_copy, i, j, previous_i as number, previous_j as number, valid_moves, instance, default_squareColor, player_turn);
 
 }

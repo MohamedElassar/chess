@@ -164,7 +164,7 @@ class ChessBoard extends React.Component {
 
 let TurnTracker = (props) => {
     return(
-        <div style={{color: "white"}} id="Turn-tracker">
+        <div style={{color: props.value}} id="Turn-tracker">
             {props.value}'s turn
         </div>
     );

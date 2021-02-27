@@ -20,7 +20,6 @@ export function getColor(i : number, j : number) : string  {
 }
 
 /****************************************************************************************************/
-
 export function findTheHighlightedSquares(state:State, board_copy:Array<Array<Piece>>, clicked_piece : Piece, temp_squareColor: Array<Array<string>>, i:number, j:number) : Array<Move> {
     
     let moves; // variable used to store the set of valid moves for the piece we clicked. These moves are stored in the Piece object (see initlaBoard)
