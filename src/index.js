@@ -237,6 +237,11 @@ class App  extends React.Component{
         console.log(this.state.history);
         return(
             <div>
+                <div id="github-logo-wrapper">
+                    <a title="GitHub Repository" href="https://github.com/MohamedElassar/chess" target="_blank">
+                    <img className="github-logo" src="https://image.flaticon.com/icons/svg/25/25231.svg" alt="Github logo" />
+                    </a>
+                </div>
                 <div id="board-wrapper">
                     <TurnTracker value={this.state.turn} /> 
                     <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
