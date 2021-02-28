@@ -48,7 +48,20 @@ function findMyKing(simualtingBoard:Array<Array<Piece>>, color:string) : number[
 
 /****************************************************************************************************/
 
-function getAllAttackLocations(simualtingBoard:Array<Array<Piece>>, copyForPawnMovementAnalysis:Array<Array<Piece>>, color:string) : Move[][] {
+export function findEnemyKing(simualtingBoard:Array<Array<Piece>>, color:string) : number[] {
+    for (let i = simualtingBoard.length - 1; i >= 0; i--) {
+        for(let j = 0; j < simualtingBoard.length ; j++){
+            if(simualtingBoard[i][j].piece === "King" && simualtingBoard[i][j].color !== color){
+                return [i, j];
+            }
+        }
+    }
+    return [0, 0]; // JUST A PLACEHOLDER TO MAKE THIS FUNCTION WORK
+}
+
+/****************************************************************************************************/
+
+export function getAllAttackLocations(simualtingBoard:Array<Array<Piece>>, copyForPawnMovementAnalysis:Array<Array<Piece>>, color:string) : Move[][] {
 
     let enemyPossibleCaptureLocations:Move[][] = [];
 
