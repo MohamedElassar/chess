@@ -96,11 +96,16 @@ button:hover, .piece:hover {
     color: white;
 }
 
-#undo {
+#bottom-buttons {
     padding-top: 2%;
 }
 
-#undo button {
+#undo, #New-Game {
+    display: inline-block;
+    vertical-align:top
+}
+
+#undo button, #New-Game button{
     background-color: white;
     border-radius: 10%;
     color: rgb(12, 2, 2);

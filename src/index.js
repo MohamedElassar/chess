@@ -180,6 +180,16 @@ let Undo = (props) => {
     );
 }
 
+let NewGame = () => {
+    return(
+        <div id="New-Game">
+            <button onClick={() => window.location.reload()}>
+                New Game
+            </button>
+        </div>
+    );
+}
+
 class App  extends React.Component{
     constructor(props){
         super(props);
@@ -230,7 +240,10 @@ class App  extends React.Component{
                 <div id="board-wrapper">
                     <TurnTracker value={this.state.turn} /> 
                     <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
-                    <Undo handleUndo={() => this.handleUndoClick()}/>      
+                    <div id="bottom-buttons">
+                        <Undo handleUndo={() => this.handleUndoClick()}/>
+                        <NewGame></NewGame>    
+                    </div>  
                 </div>
             </div>
         );
