@@ -170,6 +170,19 @@ let TurnTracker = (props) => {
     );
 }
 
+let Check = (props) => {
+    return(
+        <div>
+            {props.value ? 
+                <p style={{color:"red"}} id="check">check</p>
+            :
+                <div/>
+            }
+        </div>
+        
+    );
+}
+
 let Undo = (props) => {
     return(
         <div id="undo">
@@ -198,7 +211,8 @@ class App  extends React.Component{
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] }, // valid coordinates stores all the locations of the valid moves for the piece selected
             squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
             turn: "white",
-            history: [JSON.parse(JSON.stringify(pieces))] // array to store all the history of moves. Used for the undo button
+            history: [JSON.parse(JSON.stringify(pieces))], // array to store all the history of moves. Used for the undo button
+            in_check: false
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleUndoClick = this.handleUndoClick.bind(this);
@@ -243,7 +257,8 @@ class App  extends React.Component{
                     </a>
                 </div>
                 <div id="board-wrapper">
-                    <TurnTracker value={this.state.turn} /> 
+                    <TurnTracker value={this.state.turn} />
+                    <Check value={this.state.in_check}></Check> 
                     <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
                     <div id="bottom-buttons">
                         <Undo handleUndo={() => this.handleUndoClick()}/>

@@ -1,6 +1,6 @@
 import {Piece, Move} from './initialBoard'; // importing the interfaces from the initalBoard file which defines each piece object
 import {State} from './startAnalysis';
-
+import {willMovingHereCheckMe} from './check';
 /****************************************************************************************************/
 // function called once to initalize the chess board to the brown colors, and called to set the global variable "default_squareColor"
 export function getColor(i : number, j : number) : string  {
@@ -68,23 +68,21 @@ function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Arra
             
             if(board_copy[move_x][move_y].piece === "" || board_copy[move_x][move_y].color !== board_copy[i][j].color){ // check to only highlight the pieces that are not occupied by pieces of the same color
                 
-                temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
-                // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
-                // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
-                valid_moves.push(
-                    {
-                    x: move_x, 
-                    y: move_y 
-                    });
-                
-            } else {
-                
-                if(board_copy[i][j].piece === "Pawn"){ // if this is true, this means my pawn (which hasn't moved before) has another piece infront of it and so can't skip it
-                    break; // otherwise, if my first move is a knight to a square right infront of a pawn, and i want to move that pawn next, I would highlight the square two rows up. Pawns shouldn't be able to skip other pieces
+
+                if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+                    
+                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
+                    // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
+                    // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
+                    valid_moves.push(
+                        {
+                        x: move_x, 
+                        y: move_y 
+                        });
+
                 }
 
-            }
-
+            } 
         }
     }
 
@@ -116,14 +114,17 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
 
             if(board_copy[move_x][move_y].piece === ""){
 
-                temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
-                // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
-                // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
-                valid_moves.push(
-                    {
-                    x: move_x, 
-                    y: move_y 
-                    });
+                if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+
+                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
+                    // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
+                    // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
+                    valid_moves.push(
+                        {
+                        x: move_x, 
+                        y: move_y 
+                        });
+                }
 
             } else {
                 break;
@@ -141,15 +142,18 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
             if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){
                 if(board_copy[move_x][move_y].piece !== "" && board_copy[move_x][move_y].color !== board_copy[i][j].color){
 
-                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
-                    // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
-                    // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
-                    valid_moves.push(
-                        {
-                        x: move_x, 
-                        y: move_y 
-                        });
-    
+                    if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+
+                        temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
+                        // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
+                        // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
+                        valid_moves.push(
+                            {
+                            x: move_x, 
+                            y: move_y 
+                            });
+                    }
+
                 } 
             }
 
@@ -165,14 +169,19 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
 
         if(board_copy[move_x][move_y].piece === ""){
 
-            temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
-                // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
-                // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
-                valid_moves.push(
-                    {
-                    x: move_x, 
-                    y: move_y 
-                    });
+            if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+
+                temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
+                    // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
+                    // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
+                    valid_moves.push(
+                        {
+                        x: move_x, 
+                        y: move_y 
+                        });
+
+                }
+
         }
 
         // checking if we can highlight the corner squares if there's potential for capturing
@@ -185,15 +194,18 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
 
                 if(board_copy[move_x][move_y].piece !== "" && board_copy[move_x][move_y].color !== board_copy[i][j].color){
 
-                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
-                    // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
-                    // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
-                    valid_moves.push(
-                        {
-                        x: move_x, 
-                        y: move_y 
-                        });
+                    if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
 
+                        temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)                    
+                        // if we find a valid square that we can potentially move to, we'll add it valid_moves which will be used to update the state's "selected_piece{validCoordinates}"
+                        // this validCoordinates will be used as the comparison point if our next click is on an empty square. That square's (x,y) will be compared to the coordinates in validCoordinates
+                        valid_moves.push(
+                            {
+                            x: move_x, 
+                            y: move_y 
+                            });
+
+                    }
                 }
 
             }
@@ -209,13 +221,17 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
                     let previous_board = history[history.length - 2];
                     let previous_opponent_location = previous_board[i][j-1];
                     if(previous_opponent_location.piece === "" && previous_board[i-2][j-1].piece === "Pawn" && previous_board[i-2][j-1].moved_before === false){
-                        temp_squareColor[i-1][j-1] = "pink";                    
-                        valid_moves.push(
-                            {
-                            x: i-1, 
-                            y: j-1 
-                            });
-    
+                        
+                        if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+
+                            temp_squareColor[i-1][j-1] = "pink";                    
+                            valid_moves.push(
+                                {
+                                x: i-1, 
+                                y: j-1 
+                                });
+
+                        }
                     }
                 }
             } 
@@ -225,13 +241,17 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
                     let previous_board = history[history.length - 2];
                     let previous_opponent_location = previous_board[i][j+1];
                     if(previous_opponent_location.piece === "" && previous_board[i-2][j+1].piece === "Pawn" && previous_board[i-2][j+1].moved_before === false){
-                        temp_squareColor[i-1][j+1] = "pink";                    
-                        valid_moves.push(
-                            {
-                            x: i-1, 
-                            y: j+1 
-                            });
-    
+                        
+                        if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+
+                            temp_squareColor[i-1][j+1] = "pink";                    
+                            valid_moves.push(
+                                {
+                                x: i-1, 
+                                y: j+1 
+                                });
+
+                        }
                     }
                 }
             }
@@ -242,13 +262,16 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
                     let previous_board = history[history.length - 2];
                     let previous_opponent_location = previous_board[i][j-1];
                     if(previous_opponent_location.piece === "" && previous_board[i+2][j-1].piece === "Pawn" && previous_board[i+2][j-1].moved_before === false){
-                        temp_squareColor[i+1][j-1] = "pink";                    
-                        valid_moves.push(
-                            {
-                            x: i+1, 
-                            y: j-1 
-                            });
+                        
+                        if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
 
+                            temp_squareColor[i+1][j-1] = "pink";                    
+                            valid_moves.push(
+                                {
+                                x: i+1, 
+                                y: j-1 
+                                });
+                        }
                     }
                 }
             } 
@@ -258,13 +281,16 @@ function highlightPawn(board_copy: Array<Array<Piece>> , history : Array<Array<A
                     let previous_board = history[history.length - 2];
                     let previous_opponent_location = previous_board[i][j+1];
                     if(previous_opponent_location.piece === "" && previous_board[i+2][j+1].piece === "Pawn" && previous_board[i+2][j+1].moved_before === false){
-                        temp_squareColor[i+1][j+1] = "pink";                    
-                        valid_moves.push(
-                            {
-                            x: i+1, 
-                            y: j+1 
-                            });
+                        
+                        if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
 
+                            temp_squareColor[i+1][j+1] = "pink";                    
+                            valid_moves.push(
+                                {
+                                x: i+1, 
+                                y: j+1 
+                                });
+                        }
                     }
                 }
             }
@@ -297,23 +323,31 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Arr
             if(move_x < 8 && move_x >= 0 && move_y < 8 && move_y >= 0){ // check to ensure that we don't get a "index out of bound" error
                 
                 if(board_copy[move_x][move_y].piece === ""){  // highlighting an empty square in the piece's proposed path
-                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
-                    valid_moves.push(
-                        {
-                        x: move_x, 
-                        y: move_y 
-                        });
                     
+                    if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+
+                        temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+                        valid_moves.push(
+                            {
+                            x: move_x, 
+                            y: move_y 
+                            });
+                    
+                    }
+
                 } else if (board_copy[move_x][move_y].color !== board_copy[i][j].color) { // highlighting a non-empty square that must be of the opposite color. This shows that we can capture this piece
                 
-                    temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
-                    valid_moves.push(
-                        {
-                        x: move_x, 
-                        y: move_y 
-                        });
-                    break; // breaking because we can't skip over the enemy piece that we found on our path
-                
+                    if( !willMovingHereCheckMe(board_copy, move_x, move_y, i, j) ){
+
+                        temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
+                        valid_moves.push(
+                            {
+                            x: move_x, 
+                            y: move_y 
+                            });
+                        break; // breaking because we can't skip over the enemy piece that we found on our path
+                    }
+
                 } else {
                     break; // we must've come across a piece of the same color in our path. Thus, we break and try a different pattern
                 }
