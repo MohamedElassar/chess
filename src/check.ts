@@ -318,18 +318,20 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, i:number, j:number, m
                         y: move_y 
                         });
                     
-                } else if (board_copy[move_x][move_y].color !== board_copy[i][j].color) { // highlighting a non-empty square that must be of the opposite color. This shows that we can capture this piece
+                } else if (board_copy[move_x][move_y].color !== board_copy[i][j].color){ // highlighting a non-empty square that must be of the opposite color. This shows that we can capture this piece
                 
                     valid_moves.push(
                         {
                         x: move_x, 
                         y: move_y 
                         });
+                        
                     break; // breaking because we can't skip over the enemy piece that we found on our path
                 
                 } else {
                     break; // we must've come across a piece of the same color in our path. Thus, we break and try a different pattern
                 }
+
             }
         }
 

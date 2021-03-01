@@ -30,7 +30,6 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
 
         ///////////////////////
         // checking if I put them in check after my move
-        
         let didIPutThemInCheck:boolean = false;
 
         let [enemyKing_x, enemyKing_y] = findEnemyKing(board_copy, player_turn) // find the enemy's king
@@ -54,14 +53,12 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
         }
         ///////////////////////
 
-
         // we successfully made a move. now we need to switch the turns so that the opposite color can play
         if(player_turn === "white"){
             player_turn = "black";
         } else {
             player_turn = "white";
         }
-
 
         // update the board and reset the previous selection to be nothing + update history array for undoing
         instance.setState( (prevState:State) => ({
@@ -70,7 +67,7 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
             squareColor: JSON.parse(JSON.stringify(default_squareColor)),
             turn: player_turn, // update the color of the turn
             history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))], // storing history for undo button
-            in_check: didIPutThemInCheck
+            in_check: [...prevState.in_check, didIPutThemInCheck]
         }));
     }
 

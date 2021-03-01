@@ -16,6 +16,7 @@ export interface State {
     instance: this;
     turn: string;
     history: Array<Array<Piece>>[];
+    in_check: boolean[];
 }
 
 /*

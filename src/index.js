@@ -179,7 +179,6 @@ let Check = (props) => {
                 <div/>
             }
         </div>
-        
     );
 }
 
@@ -212,7 +211,7 @@ class App  extends React.Component{
             squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
             turn: "white",
             history: [JSON.parse(JSON.stringify(pieces))], // array to store all the history of moves. Used for the undo button
-            in_check: false
+            in_check: [false]
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleUndoClick = this.handleUndoClick.bind(this);
@@ -233,10 +232,10 @@ class App  extends React.Component{
             // user may be trying to capture e.g. white's turn clicking on a black piece
             canCapture(this, this.state, i, j, clicked_piece, default_squareColor);    
         }
-        
     }
     
     handleUndoClick(){
+        // console.log(this.state.in_check);
         // ugly - return state back to what it was
         this.setState( (prevState) => ({
             board: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1).pop() : prevState.history[0], // not the smartest way
@@ -244,12 +243,16 @@ class App  extends React.Component{
             turn: prevState.history.length === 1 ? "white" :  prevState.turn === "black" ? "white" : "black", // not the smartest way
             squareColor: default_squareColor,
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] },
-            in_check: false
+            in_check: prevState.in_check.slice(0, prevState.in_check.length - 1)
         }));
     }
 
+    componentDidMount(){
+        console.log();
+    }
+
     render(){
-        console.log(this.state.history);
+        // console.log(this.state.in_check);
         return(
             <div>
                 <div id="github-logo-wrapper">
@@ -259,7 +262,7 @@ class App  extends React.Component{
                 </div>
                 <div id="board-wrapper">
                     <TurnTracker value={this.state.turn} />
-                    <Check value={this.state.in_check}></Check> 
+                    <Check value={this.state.in_check[this.state.in_check.length - 1]}></Check> 
                     <ChessBoard pieces={this.state.board} squareColor={this.state.squareColor} handleClick={(i, j) => this.handleClick(i, j)} />
                     <div id="bottom-buttons">
                         <Undo handleUndo={() => this.handleUndoClick()}/>
