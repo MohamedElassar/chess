@@ -313,9 +313,10 @@ function highlightDynamic(board_copy: Array<Array<Piece>>, temp_squareColor: Arr
 
                         temp_squareColor[move_x][move_y] = "pink"; // changing the location's color to pink (array changed by reference; this changes the array back in startAnalysis)
                         valid_moves.push({ x: move_x, y: move_y });
-                        break; // breaking because we can't skip over the enemy piece that we found on our path
-                    
+
                     }
+
+                    break;// breaking because we can't skip over the enemy piece that we found on our path
 
                 } else {
 
