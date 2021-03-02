@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import {getColor} from './highlighting';
 import {pieces} from './initialBoard';
-import {startAnalysis, canCapture} from './startAnalysis';
+import {startAnalysis} from './startAnalysis';
 
 // just storing a copy of the default chess color puzzle. This is so that we can reset to this set of colors when needed
 let default_squareColor = new Array(8).fill("").map((value, index) => new Array(8).fill("").map( (value_2, indexx) => getColor(index, indexx) )  )
@@ -220,22 +220,12 @@ class App  extends React.Component{
     handleClick(i, j){
         //an object with info about the box we just clicked
         let clicked_piece = this.state.board[i][j];
-
-        let clicked_piece_color = clicked_piece.color;
-
-        if(clicked_piece_color === this.state.turn || clicked_piece_color === "" ){ 
-            // only allow player to move the pieces in the correct turn. if the current turn is white and they click a black piece, no analysis takes place
-            // handle the logic of the user clicking on a square in their correct turn e.g. white's turn and they click on a white/blank square
-            // also handle En Passant for Pawns
-            startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
-        } else if (clicked_piece.color !== this.state.turn) {
-            // user may be trying to capture e.g. white's turn clicking on a black piece
-            canCapture(this, this.state, i, j, clicked_piece, default_squareColor);    
-        }
+ 
+        // analyze whether we're trying to move our piece to a blank square, trying to capture, in check, etc..
+        startAnalysis(this, i, j, clicked_piece, this.state, default_squareColor);
     }
     
     handleUndoClick(){
-        // console.log(this.state.in_check);
         // ugly - return state back to what it was
         this.setState( (prevState) => ({
             board: prevState.history.length > 1 ? prevState.history.slice(0, prevState.history.length - 1).pop() : prevState.history[0], // not the smartest way
@@ -252,11 +242,10 @@ class App  extends React.Component{
     }
 
     render(){
-        // console.log(this.state.in_check);
         return(
             <div>
                 <div id="github-logo-wrapper">
-                    <a title="GitHub Repository" href="https://github.com/MohamedElassar/chess" target="_blank">
+                    <a title="GitHub Repository" href="https://github.com/MohamedElassar/chess" target="_blank" rel="noreferrer">
                     <img className="github-logo" src="https://image.flaticon.com/icons/svg/25/25231.svg" alt="Github logo" />
                     </a>
                 </div>
