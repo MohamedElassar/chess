@@ -8,10 +8,11 @@ export function willMovingHereCheckMe(board_copy:Array<Array<Piece>>, move_x:num
 
     let currentColor = pieceInvestigating.color;
 
+    // copy of the board where we will simualte the move to the highlighted square and see if moving there will check myself
     let simualtingBoard = JSON.parse(JSON.stringify(board_copy));
     let copyForPawnMovementAnalysis = JSON.parse(JSON.stringify(board_copy));
 
-
+    // moving the clicked piece to the proposed location
     simualtingBoard[move_x][move_y] = pieceInvestigating;
     simualtingBoard[i][j] = {image: "", piece: "", color: "", move:[]};
 

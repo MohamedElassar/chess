@@ -26,9 +26,6 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
         // promoting a pawn that reached the end of the board
         promotePawn(board_copy, i, j, previous_i, previous_j);
 
-
-
-        ///////////////////////
         // checking if I put them in check after my move
         let didIPutThemInCheck:boolean = false;
 
@@ -51,15 +48,10 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
                 }
             }
         }
-        ///////////////////////
 
         // we successfully made a move. now we need to switch the turns so that the opposite color can play
-        if(player_turn === "white"){
-            player_turn = "black";
-        } else {
-            player_turn = "white";
-        }
-
+        player_turn === "white" ? player_turn = "black" : player_turn = "white";
+        
         // update the board and reset the previous selection to be nothing + update history array for undoing
         instance.setState( (prevState:State) => ({
             board: JSON.parse(JSON.stringify(board_copy)),
@@ -67,7 +59,7 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
             squareColor: JSON.parse(JSON.stringify(default_squareColor)),
             turn: player_turn, // update the color of the turn
             history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))], // storing history for undo button
-            in_check: [...prevState.in_check, didIPutThemInCheck]
+            in_check: [...prevState.in_check, didIPutThemInCheck] // appending the state of check for the undo button
         }));
     }
 
