@@ -42,7 +42,7 @@ export function findTheHighlightedSquares(state:State, board_copy:Array<Array<Pi
     } else if (clicked_piece.piece === "Knight" || clicked_piece.piece === "King"){
 
         moves = clicked_piece.move;
-        validCoordinates = highlightFixed(board_copy, temp_squareColor, i, j, moves as Move[]);
+        validCoordinates = highlightFixed(state, board_copy, temp_squareColor, i, j, moves as Move[]);
         return JSON.parse(JSON.stringify(validCoordinates));
     
     } else {
@@ -53,8 +53,8 @@ export function findTheHighlightedSquares(state:State, board_copy:Array<Array<Pi
 
 /****************************************************************************************************/
 // function to find the spots to highlight on the puzzle for pieces with a fixed pattern of movement i.e. no diagonals / no moves that extend to either end of the puzzle
-// applies to Pawn, Knight, King BUT Knights are the only puzzle piece that can skip over other pieces
-function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]) : Array<Move> {    
+// applies to Knight and King BUT Knights are the only puzzle piece that can skip over other pieces
+function highlightFixed(state:State, board_copy: Array<Array<Piece>>, temp_squareColor: Array<Array<string>>, i:number, j:number, moves:Move[]) : Array<Move> {    
         
     let move_x:number;
     let move_y:number;
@@ -83,9 +83,54 @@ function highlightFixed(board_copy: Array<Array<Piece>> , temp_squareColor: Arra
         }
     }
 
+    checkForCastling(state, board_copy, i, j, temp_squareColor, valid_moves);
+
     return valid_moves;
 
 }
+
+/****************************************************************************************************/
+function checkForCastling(state:State, board_copy:Array<Array<Piece>>, i:number, j:number, temp_squareColor:Array<Array<string>>, valid_moves:Array<Move>){
+    
+    let starting_board = state.history[0];
+    let can_castle = board_copy[i][j].color === "white" ? state.can_white_castle[state.can_white_castle.length - 1]: state.can_black_castle[state.can_black_castle.length - 1]; 
+    if(can_castle && board_copy[i][j].piece === "King" && board_copy[i][j].moved_before === false){
+        if(board_copy[i][7].piece === "Rook" && board_copy[i][7].moved_before === false){
+            for(let index = j+1; index < 7 ; index++){
+                if(board_copy[i][index].piece === ""){
+                    if(!willMovingHereCheckMe(board_copy, i, index, i, j)){
+                        if(index === 6){
+                            temp_squareColor[i][index] = "red";
+                            valid_moves.push({x:i, y:index});
+                        }
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        
+            if(board_copy[i][0].piece === "Rook" && board_copy[i][0].moved_before === false){
+                for(let index = j-1; index > 0 ; index--){
+                    if(board_copy[i][index].piece === ""){
+                        if(!willMovingHereCheckMe(board_copy, i, index, i, j)){
+                            if(index === 1){
+                                temp_squareColor[i][index + 1] = "red";
+                                valid_moves.push({x:i, y:index + 1});
+                            }
+                        } else {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 /****************************************************************************************************/
 // function to find the spots to highlight on the puzzle for pieces with a fixed pattern of movement i.e. no diagonals / no moves that extend to either end of the puzzle

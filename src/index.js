@@ -211,7 +211,9 @@ class App  extends React.Component{
             squareColor: default_squareColor, // squareColor is the 2D array of square colors for the puzzle that is passed every render cycle to the children
             turn: "white",
             history: [JSON.parse(JSON.stringify(pieces))], // array to store all the history of moves. Used for the undo button
-            in_check: [false]
+            in_check: [false], // array to store the history of in-check warnings so that undo can function accurately
+            can_white_castle: [true],
+            can_black_castle: [true]
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleUndoClick = this.handleUndoClick.bind(this);
@@ -233,7 +235,9 @@ class App  extends React.Component{
             turn: prevState.history.length === 1 ? "white" :  prevState.turn === "black" ? "white" : "black", // not the smartest way
             squareColor: default_squareColor,
             selected_piece: { i : "", j : "", value : "", validCoordinates: [] },
-            in_check: prevState.in_check.slice(0, prevState.in_check.length - 1)
+            in_check: prevState.in_check.slice(0, prevState.in_check.length - 1),
+            can_white_castle: prevState.can_white_castle.slice(0, prevState.can_white_castle.length - 1),
+            can_black_castle: prevState.can_black_castle.slice(0, prevState.can_black_castle.length - 1)
         }));
     }
 

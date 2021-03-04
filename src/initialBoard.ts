@@ -32,6 +32,7 @@ let dark_Rook:Piece = {
     image: darkRook,
     piece: "Rook",
     color: "black",
+    moved_before: false,
     move: [
         {
             x: 0,
@@ -160,6 +161,7 @@ let dark_King:Piece = {
     image: darkKing,
     piece: "King",
     color: "black",
+    moved_before: false,
     move:[
         {
             x:0,
@@ -240,6 +242,7 @@ let light_Rook:Piece = {
     image: lightRook,
     piece: "Rook",
     color: "white",
+    moved_before: false,
     move: [
         {
             x: 0,
@@ -368,6 +371,7 @@ let light_King:Piece = {
     image: lightKing,
     piece: "King",
     color: "white",
+    moved_before: false,
     move:[
         {
             x:0,

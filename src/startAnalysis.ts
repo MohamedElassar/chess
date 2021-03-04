@@ -17,6 +17,8 @@ export interface State {
     turn: string;
     history: Array<Array<Piece>>[];
     in_check: boolean[];
+    can_white_castle: boolean[];
+    can_black_castle: boolean[];
 }
 
 /****************************************************************************************************/
@@ -84,7 +86,7 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
                         
                         // makeMove will analyze if the proposed move is valid and will alter the board accordingly
                         // note that I override the typescript types using the "as" keyword. This is because initally the indeces are set to "" so they can be either string or number
-                        makeMove(board_copy, i, j, previous_i as number, previous_j as number, validLocationsToMoveTo, instance, default_squareColor, player_turn);
+                        makeMove(board_copy, i, j, previous_i as number, previous_j as number, validLocationsToMoveTo, instance, default_squareColor, player_turn, state);
 
                     break; 
                     case false: // previous was a piece + current selection is a another piece
@@ -103,7 +105,7 @@ export function startAnalysis(instance:any, i:number, j:number, clicked_piece:Pi
 
     } else if(clicked_piece.color !== instance.state.turn) { // e.g. we clicked on a black piece in a white turn, so we'll try to see if we can capture
 
-        makeMove(board_copy, i, j, previous_i as number, previous_j as number, validMoves, instance, default_squareColor, player_turn);
+        makeMove(board_copy, i, j, previous_i as number, previous_j as number, validMoves, instance, default_squareColor, player_turn, state);
     
     }
 

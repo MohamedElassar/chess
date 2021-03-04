@@ -5,7 +5,7 @@ import {findEnemyKing, getAllAttackLocations} from './check';
 /****************************************************************************************************/
 // function to analyze if the location the user clicked is a valid move for the piece they previously clicked
 export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number, 
-    validLocationsToMoveTo: Array<Move>, instance:any, default_squareColor:Array<Array<string>>, player_turn: string){
+    validLocationsToMoveTo: Array<Move>, instance:any, default_squareColor:Array<Array<string>>, player_turn: string, state:State){
 
     let isValid:boolean = isValidMove(i, j, validLocationsToMoveTo);
     
@@ -14,12 +14,27 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
         // check if we're tyring to capture a pawn through en passant 
         checkForEnPassant(board_copy, i, j, previous_i, previous_j, validLocationsToMoveTo);
 
+       // castling
+       let canWhiteCastle:boolean = true;
+       let canBlackCastle:boolean = true;
+
+       if(board_copy[previous_i][previous_j].piece === "King" && board_copy[i][j].piece === "" && board_copy[previous_i][previous_j].moved_before === false && (canBlackCastle || canWhiteCastle)){
+           checkCastling(board_copy, i, j, previous_i, previous_j, validLocationsToMoveTo);
+           board_copy[previous_i][previous_j].moved_before = true;
+           if(player_turn === "white"){
+               canWhiteCastle = false;
+           } else {
+               canBlackCastle = false;
+           }
+       }
+       //
+
         // swapping the elements in the board (the current one we clicked with the previous one we clicked)
         swap(board_copy, i, j, previous_i, previous_j);
         console.log("moved!");
 
         // specific to pawns: after moving them for the first time, we have to set their moved_before attribute to true. This will enable us to use their second set of valid moves next time we want to move the same pawn
-        if(board_copy[i][j].piece === "Pawn" && board_copy[i][j].moved_before === false){
+        if((board_copy[i][j].piece === "Pawn"|| board_copy[i][j].piece === "Rook") && board_copy[i][j].moved_before === false){
             board_copy[i][j].moved_before = true;
         }
 
@@ -49,6 +64,7 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
             }
         }
 
+
         // we successfully made a move. now we need to switch the turns so that the opposite color can play
         player_turn === "white" ? player_turn = "black" : player_turn = "white";
         
@@ -59,7 +75,9 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
             squareColor: JSON.parse(JSON.stringify(default_squareColor)),
             turn: player_turn, // update the color of the turn
             history: [...prevState.history, JSON.parse(JSON.stringify(board_copy))], // storing history for undo button
-            in_check: [...prevState.in_check, didIPutThemInCheck] // appending the state of check for the undo button
+            in_check: [...prevState.in_check, didIPutThemInCheck], // appending the state of check for the undo button
+            can_white_castle: [...prevState.can_white_castle, canWhiteCastle],
+            can_black_castle: [...prevState.can_black_castle, canBlackCastle]
         }));
     }
 
@@ -85,3 +103,10 @@ function checkForEnPassant(board_copy:Array<Array<Piece>>, i:number, j:number, p
     }
 }
 /****************************************************************************************************/
+function checkCastling(board_copy:Array<Array<Piece>>, i:number, j:number, previous_i:number, previous_j:number, validLocationsToMoveTo:Array<Move>){
+    if(j - previous_j === 2){
+        swap(board_copy, i, j-1, i, 7);
+    } else if (previous_j - j === 2){
+        swap(board_copy, i, j+1, i, 0);
+    }
+}
