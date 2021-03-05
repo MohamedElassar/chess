@@ -212,8 +212,8 @@ class App  extends React.Component{
             turn: "white",
             history: [JSON.parse(JSON.stringify(pieces))], // array to store all the history of moves. Used for the undo button
             in_check: [false], // array to store the history of in-check warnings so that undo can function accurately
-            can_white_castle: [true],
-            can_black_castle: [true]
+            can_white_castle: [true], // storing the state of whether or not the white player can castle. in an array for ease and accuracy of undo
+            can_black_castle: [true] // storing the state of whether or not the white player can castle. in an array for ease and accuracy of undo
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleUndoClick = this.handleUndoClick.bind(this);

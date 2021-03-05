@@ -7,27 +7,23 @@ import {findEnemyKing, getAllAttackLocations} from './check';
 export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, previous_i: number, previous_j:number, 
     validLocationsToMoveTo: Array<Move>, instance:any, default_squareColor:Array<Array<string>>, player_turn: string, state:State){
 
-    let isValid:boolean = isValidMove(i, j, validLocationsToMoveTo);
+    let isValid:boolean = isValidMove(i, j, validLocationsToMoveTo); // checking that the move we're trying to make is even a valid one i.e. a highlighted square which was determined to be valid
     
     if(isValid){
         
         // check if we're tyring to capture a pawn through en passant 
         checkForEnPassant(board_copy, i, j, previous_i, previous_j, validLocationsToMoveTo);
 
-       // castling
+       // castling variables to update the state if we end up castling one of our pieces
        let canWhiteCastle:boolean = true;
        let canBlackCastle:boolean = true;
 
+       // check if we tried to castle given that we previously clicked on a king and currently clicked on an empty square
        if(board_copy[previous_i][previous_j].piece === "King" && board_copy[i][j].piece === "" && board_copy[previous_i][previous_j].moved_before === false && (canBlackCastle || canWhiteCastle)){
            checkCastling(board_copy, i, j, previous_i, previous_j, validLocationsToMoveTo);
            board_copy[previous_i][previous_j].moved_before = true;
-           if(player_turn === "white"){
-               canWhiteCastle = false;
-           } else {
-               canBlackCastle = false;
-           }
+           player_turn === "white" ? canWhiteCastle = false : canBlackCastle = false;
        }
-       //
 
         // swapping the elements in the board (the current one we clicked with the previous one we clicked)
         swap(board_copy, i, j, previous_i, previous_j);
@@ -63,7 +59,6 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
                 }
             }
         }
-
 
         // we successfully made a move. now we need to switch the turns so that the opposite color can play
         player_turn === "white" ? player_turn = "black" : player_turn = "white";
@@ -104,9 +99,9 @@ function checkForEnPassant(board_copy:Array<Array<Piece>>, i:number, j:number, p
 }
 /****************************************************************************************************/
 function checkCastling(board_copy:Array<Array<Piece>>, i:number, j:number, previous_i:number, previous_j:number, validLocationsToMoveTo:Array<Move>){
-    if(j - previous_j === 2){
+    if(j - previous_j === 2){ // swapping with the rook to the right
         swap(board_copy, i, j-1, i, 7);
-    } else if (previous_j - j === 2){
+    } else if (previous_j - j === 2){ // swapping with the rook to the left
         swap(board_copy, i, j+1, i, 0);
     }
 }
