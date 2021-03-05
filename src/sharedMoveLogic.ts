@@ -28,10 +28,16 @@ export function promotePawn(board_copy:Array<Array<Piece>>, i:number, j:number, 
         while(true){
             // when we move the pawn to an empty square at the edge, we prompt the user to type in the piece they want the pawn to be promoted to
             user_choice = window.prompt("What would you like the pawn to be promoted to?\nChoose from a bishop, queen, rook, or knight.")
-            user_choice = (user_choice as string).toLocaleLowerCase()
-            if(user_choice === "rook" || user_choice === "queen" || user_choice === "knight" || user_choice === "bishop"){
-                break;
+            try{
+                user_choice = (user_choice as string).toLocaleLowerCase()
+                if(user_choice === "rook" || user_choice === "queen" || user_choice === "knight" || user_choice === "bishop"){
+                    break;
+                }
+            } catch (err){
+                // do nothing: this handles if the user clicks "cancel" in the prompt message. Otherwise, code crashes
             }
+
+
         }
     
         if(board_copy[i][j].color === "white"){
