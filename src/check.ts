@@ -118,51 +118,6 @@ function highlightFixed(board_copy: Array<Array<Piece>> , i:number, j:number, mo
     return valid_moves;
 
 }
-/****************************************************************************************************/
-// function checkForCastling(state:State, board_copy:Array<Array<Piece>>, i:number, j:number, valid_moves:Array<Move>){
-//     // getting the relevant state variable tracking whether or not we can even castle in the first place
-//     let can_castle = board_copy[i][j].color === "white" ? state.can_white_castle[state.can_white_castle.length - 1]: state.can_black_castle[state.can_black_castle.length - 1]; 
-//     // if we haven't castled before, clicked on our king who hasn't moved before, and we're not currently in check, we can start analyzing 
-//     if(can_castle && board_copy[i][j].piece === "King" && board_copy[i][j].moved_before === false && state.in_check[state.in_check.length - 1] === false) {
-//         // checking if the piece in the right corner is a rook who hasn't moved before
-//         if(board_copy[i][7].piece === "Rook" && board_copy[i][7].moved_before === false){
-//             for(let index = j+1; index < 7 ; index++){ // starting with the square to the right of the king and looping through all the sqauares to the right until (excluding) the edge
-//                 if(board_copy[i][index].piece === ""){ // checking if the square between the rook and the king is empty
-//                     if(!willMovingHereCheckMe(state, board_copy, i, index, i, j)){ // checking if moving my king to one of these squares won't put my king in check
-//                         if(index === 6){ // if we reached the last square, that means that we passed all the previous squares successfully and we can now highlight the castling square
-//                             valid_moves.push({x:i, y:index});
-//                         }
-//                     } else {
-//                         break; // moving to the square would put us in check: can't castle
-//                     }
-//                 } else { // we came across a square between the king and rook that isn't blank: we can't castle
-//                     break;
-//                 }
-//             }
-//         }
-//         // this checks for the same but with the rook in the left corner
-//         if(board_copy[i][0].piece === "Rook" && board_copy[i][0].moved_before === false){
-//             for(let index = j-1; index > 0 ; index--){
-//                 if(board_copy[i][index].piece === ""){
-//                     if(!willMovingHereCheckMe(state, board_copy, i, index, i, j)){
-//                         if(index === 1){
-//                             valid_moves.push({x:i, y:index + 1});
-//                         }
-//                     } else {
-//                         break;
-//                     }
-//                 } else {
-//                     break;
-//                 }
-//             }
-//         }
-
-//     }
-// }
-
-
-
-
 
 /****************************************************************************************************/
 // function to find the spots to highlight on the puzzle for pieces with a fixed pattern of movement i.e. no diagonals / no moves that extend to either end of the puzzle

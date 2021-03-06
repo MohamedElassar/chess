@@ -42,7 +42,7 @@ export function makeMove(board_copy : Array<Array<Piece>>, i:number, j:number, p
         let didIPutThemInCheck:boolean = didMyMovePutYouInCheck(board_copy, player_turn, state);
 
         // checking if theier next round won't have any valid moves: VERY INEFFICIENT
-        didMyMoveCheckMateThem(board_copy, player_turn === "white" ? "black" : "white", state)
+        didMyMoveCheckMateThem(board_copy, player_turn, state)
 
         // we successfully made a move. now we need to switch the turns so that the opposite color can play
         player_turn === "white" ? player_turn = "black" : player_turn = "white";
@@ -129,6 +129,8 @@ function didMyMoveCheckMateThem(board_copy:Array<Array<Piece>>, player_turn:stri
             }
         }
     }
+
+    console.log(enemyPossibleCaptureLocations);
 
     let flag = true;
 
